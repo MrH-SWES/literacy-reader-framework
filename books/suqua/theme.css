@@ -1,0 +1,334 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+
+/* =============== GLOBAL =============== */
+* { box-sizing: border-box; transition: all 0.2s ease; }
+body {
+  font-family: 'Lexend', sans-serif;
+  background-color: #f8f4ee;
+  color: #2e2e2e;
+  margin: 0;
+  padding: 0;
+}
+
+/* =============== INDEX PAGE =============== */
+.index-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 4rem;
+  min-height: 100vh;
+  padding: 4rem 2rem;
+  background: #f8f4ee;
+}
+
+.book-card, .contents-card {
+  background: #fffdf8;
+  border-radius: 20px;
+  padding: 2.5rem 3rem;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08), 0 3px 10px rgba(0,0,0,.05);
+}
+
+.book-card {
+  max-width: 400px;
+  text-align: center;
+}
+.book-cover {
+  width: 100%;
+  max-width: 280px;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+}
+.book-title {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #1e1b15;
+  margin-bottom: .25rem;
+}
+.book-author {
+  font-style: italic;
+  font-weight: 400;
+  color: #6b6b6b;
+  font-size: 1.1rem;
+  margin-bottom: .25rem;
+}
+.book-subtitle {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.contents-card {
+  max-width: 360px;
+  min-width: 320px;
+}
+.contents-heading {
+  font-weight: 600;
+  font-size: 1.6rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1e1b15;
+  border-bottom: 1px solid #e0d9ca;
+  padding-bottom: .5rem;
+}
+.contents-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.contents-list li {
+  margin: .45rem 0;
+  font-size: 1.05rem;
+  border-bottom: 1px dotted #ddd2ba;
+  padding-left: .5rem;
+}
+.contents-link {
+  text-decoration: none;
+  color: #3d5a80;
+  display: inline-block;
+  width: 100%;
+}
+.contents-link:hover {
+  color: #1e3d5a;
+}
+
+/* =============== CHAPTER PAGE =============== */
+body.chapter-page {
+  background: #f5f2eb;
+  background-image: radial-gradient(#ebe6da 1px, transparent 1px);
+  background-size: 22px 22px;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 0;
+}
+
+.chapter-container {
+  background: #fbf9f4;
+  margin: 2rem auto;
+  padding: 3rem 3.5rem;
+  max-width: 620px;
+  border-radius: 6px;
+  border: 1px solid #e3dcca;
+  box-shadow: 0 3px 10px rgba(0,0,0,.12), 0 8px 30px rgba(0,0,0,.08);
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+  color: #3d5a80;
+  font-weight: 600;
+  text-decoration: none;
+}
+.back-link:hover { text-decoration: underline; }
+
+h1 {
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.8rem;
+  margin-bottom: .5rem;
+  color: #1e1b15;
+}
+
+/* Hide chapter title after first page */
+.chapter-container:not(.first-page) h1 {
+  display: none;
+}
+
+.page-number {
+  text-align: center;
+  font-style: italic;
+  color: #6a635a;
+  margin-bottom: 0;
+  margin-top: 2rem;
+  order: 999;
+}
+
+/* === Body Text === */
+.chapter-content {
+  max-width: 700px;
+  margin: 0 auto;
+  color: #2a2722;
+  font-size: 1.1rem;
+  line-height: 2;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.chapter-content p {
+  margin: 0.3em 0;
+  text-indent: 0; /* No indent by default */
+  text-align: justify;
+  white-space: normal;
+}
+
+/* Add indent to all paragraphs except the first */
+.chapter-content p + p {
+  text-indent: 2em;
+}
+
+/* Drop cap only on first paragraph of first page */
+.first-page .chapter-content p:first-of-type::first-letter {
+  float: left;
+  font-size: 4.2rem;
+  line-height: .75;
+  font-weight: 600;
+  margin-right: .4rem;
+  margin-top: .15rem;
+  color: #1f1d18;
+}
+
+/* Drop cap only on first paragraph of first page */
+.first-page .chapter-content p:first-of-type::first-letter {
+  float: left;
+  font-size: 4.2rem;
+  line-height: .75;
+  font-weight: 600;
+  margin-right: .4rem;
+  margin-top: .15rem;
+  color: #1f1d18;
+}
+
+/* =============== NAV BUTTONS =============== */
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+.nav-button {
+  background: #ece3cf;
+  border: 1px solid #d5c7aa;
+  padding: .5rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #2e2a23;
+  font-weight: 500;
+}
+.nav-button:hover { background: #dfd4b8; }
+
+/* =============== GLOSSARY TERMS =============== */
+.glossary-wrap {
+  color: #27496d;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline;
+  padding: 0;
+  margin: 0;
+  border-radius: 2px;
+  transition: background 0.15s ease;
+}
+
+.glossary-wrap:hover,
+.glossary-wrap:focus {
+  background: #e6f0ff;
+  outline: none;
+}
+
+.glossary-wrap.active {
+  background: #d0e7ff;
+}
+
+/* =============== GLOSSARY POPUP CONTAINER =============== */
+#glossary-popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: visible;
+}
+
+#glossary-popup-container * {
+  pointer-events: auto;
+}
+
+/* =============== GLOSSARY POPUP =============== */
+.glossary-popup {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  z-index: 10000;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.glossary-popup-content {
+  background: #fffbe8;
+  border: 2px solid #cbb77c;
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.glossary-popup-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: #6b5d4f;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+  padding: 0;
+}
+
+.glossary-popup-close:hover {
+  background: #e6ddc0;
+}
+
+.glossary-popup-close:focus {
+  outline: 2px solid #a0c4ff;
+  outline-offset: 2px;
+}
+
+.glossary-popup-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #2a2722;
+  padding-right: 20px;
+  user-select: text;
+}
+
+.glossary-image {
+  display: block;
+  width: 100%;
+  max-width: 250px;
+  margin-top: 12px;
+  border-radius: 6px;
+}
+
+/* =============== MOBILE =============== */
+@media (max-width: 900px) {
+  .glossary-popup {
+    left: 50% !important;
+    right: auto !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%);
+    width: 90vw;
+    max-width: 350px;
+  }
+}

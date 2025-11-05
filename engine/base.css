@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&display=swap');
+
+body {
+  font-family: 'Lexend', sans-serif;
+  background: #f8f5f0;
+  margin: 0;
+  color: #2e2a23;
+}
+
+/* --- Library --- */
+.library-container {
+  text-align: center;
+  padding: 2rem;
+}
+.book-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+.book-card {
+  background: #fffdf8;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  cursor: pointer;
+  width: 200px;
+  transition: transform 0.2s;
+}
+.book-card:hover {
+  transform: translateY(-5px);
+}
+.book-card img {
+  width: 100%;
+  border-radius: 6px;
+  margin-bottom: .75rem;
+}
+
+/* --- Reader --- */
+.chapter-container {
+  max-width: 680px;
+  margin: 2rem auto;
+  background: #fffdf8;
+  padding: 3rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.chapter-content p {
+  line-height: 1.65;
+  margin: 1em 0;
+  text-align: justify;
+}
+.nav-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+button {
+  background: #ece3cf;
+  border: 1px solid #d5c7aa;
+  padding: .5rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover {
+  background: #dfd4b8;
+}
+.back-link {
+  display: block;
+  margin: 1rem;
+  color: #3d5a80;
+  text-decoration: none;
+  font-weight: 600;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
