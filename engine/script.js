@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!chapterContainer) return;
 
+  // --- Book + Chapter Context ---------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
   const book = urlParams.get("book") || "suqua";
   const chapterFile = urlParams.get("chapter") || "chapter1.txt";
@@ -183,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderPage() {
     if (!pages.length) return;
     const page = pages[currentPage];
+
     pageNumberDisplay.textContent = `Page ${page.number}`;
     chapterContainer.innerHTML = makeParagraphHTML(page.content);
     enhanceGlossary();
@@ -197,11 +199,25 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // --- Header Renderer ----------------------------------------------------
-  function renderChapterHeader(chapterInfo, chapterTitleEl) {
+  function renderChapterHeader(chapterInfo, chapterTitleEl, manifestData) {
+    // Fix: Adjust numbering for multi-part chapters
+    let chapterNum = chapterInfo.number ?? 1;
+    if (/\(Part\s*\d+\)/i.test(chapterInfo.title || "")) {
+      const idx = Array.isArray(manifestData)
+        ? manifestData.indexOf(chapterInfo)
+        : -1;
+      if (idx > 0) {
+        const prev = manifestData[idx - 1];
+        const basePrev = prev.title ? prev.title.split("(Part")[0].trim() : "";
+        const baseCurr = chapterInfo.title.split("(Part")[0].trim();
+        if (basePrev && baseCurr && basePrev === baseCurr) {
+          chapterNum = prev.number;
+        }
+      }
+    }
+
     const series = chapterInfo.series || "Small Steps:";
     const bookTitle = chapterInfo.bookTitle || "The Year I Got Polio";
-    const number =
-      chapterInfo.number ?? chapterInfo.chapter ?? chapterInfo.idx ?? "";
     const title = chapterInfo.title || chapterInfo.chapterTitle || "Untitled";
     const author = chapterInfo.author || "Peg Kehret";
 
@@ -209,15 +225,13 @@ document.addEventListener("DOMContentLoaded", () => {
       <div class="chapter-header">
         <p class="book-series" style="font-size:1.05rem; color:#000; font-weight:normal; margin:0 0 0.2rem 0;">${series}</p>
         <h1 class="book-main-title" style="margin:0; font-size:2.2rem;">${bookTitle}</h1>
-        <h2 class="chapter-subtitle" style="margin:0.5rem 0 0.75rem 0;">${
-          number ? `Chapter ${number}: ${title}` : title
-        }</h2>
+        <h2 class="chapter-subtitle" style="margin:0.5rem 0 0.75rem 0;">Chapter ${chapterNum}: ${title}</h2>
         <p class="chapter-author" style="margin:0.25rem 0 1.5rem 0; font-size:0.95rem; font-style:italic; color:#555;">by ${author}</p>
       </div>
       <hr class="title-divider">
     `;
 
-    document.title = `${bookTitle} — Chapter ${number}`;
+    document.title = `${bookTitle} — Chapter ${chapterNum}`;
   }
 
   // --- Load Data ----------------------------------------------------------
@@ -236,9 +250,10 @@ document.addEventListener("DOMContentLoaded", () => {
         ? manifestData.find((ch) => ch.file === chapterFile)
         : null;
 
-      if (chapterInfo && chapterTitleEl) renderChapterHeader(chapterInfo, chapterTitleEl);
+      if (chapterInfo && chapterTitleEl)
+        renderChapterHeader(chapterInfo, chapterTitleEl, manifestData);
 
-      // remove header repetition from file text
+      // Remove redundant book header lines from the loaded text
       chapterText = chapterText.replace(
         /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
         ""
