@@ -184,15 +184,33 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderPage() {
     if (!pages.length) return;
     const page = pages[currentPage];
+    let html = page.content;
 
-    pageNumberDisplay.textContent = `Page ${page.number}`;
-    chapterContainer.innerHTML = makeParagraphHTML(page.content);
+    // Handle embedded images with syntax: [image: filename | width | align]
+    html = html.replace(
+      /\[image:\s*([^\|\]\s]+)(?:\s*\|\s*([^\|\]\s]+))?(?:\s*\|\s*(left|right|center))?\s*\]/gi,
+      (_, file, width, align) => {
+        const styleParts = [];
+        if (width) styleParts.push(`width:${width}`);
+        if (align === "center")
+          styleParts.push("display:block;margin:1.5rem auto;");
+        else if (align === "left")
+          styleParts.push("float:left;margin:0 1rem 1rem 0;");
+        else if (align === "right")
+          styleParts.push("float:right;margin:0 0 1rem 1rem;");
+        const style = styleParts.join("");
+        return `<img src="../books/${book}/images/${file}" alt="" class="chapter-illustration" style="${style}">`;
+      }
+    );
+
+    chapterContainer.innerHTML = makeParagraphHTML(html);
     enhanceGlossary();
 
     const wrapper = document.querySelector(".chapter-container");
     if (currentPage === 0) wrapper.classList.add("first-page");
     else wrapper.classList.remove("first-page");
 
+    pageNumberDisplay.textContent = `Page ${page.number}`;
     localStorage.setItem(`page-${book}-${chapterFile}`, currentPage);
     prevButton.disabled = currentPage === 0;
     nextButton.disabled = currentPage === pages.length - 1;
@@ -253,7 +271,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (chapterInfo && chapterTitleEl)
         renderChapterHeader(chapterInfo, chapterTitleEl, manifestData);
 
-      // Remove redundant book header lines from the loaded text
+      // Remove redundant header lines
       chapterText = chapterText.replace(
         /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
         ""
