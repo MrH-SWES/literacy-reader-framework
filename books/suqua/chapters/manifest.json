@@ -2,7 +2,9 @@
   {
     "number": 1,
     "title": "Suqua",
-    "file": "chapter1.txt"
+    "file": "chapter1.txt",
+    "bookTitle": "Daughter of Suqua",
+    "author": "Diane Johnston Hamm"
   },
   {
     "number": 2,
