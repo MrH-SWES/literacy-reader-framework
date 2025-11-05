@@ -1,6 +1,7 @@
 [
   {
     "number": 1,
+    "displayNumber": 1,
     "title": "The Diagnosis (Part 1)",
     "file": "chapter1-part1.txt",
     "bookTitle": "The Year I Got Polio",
@@ -8,36 +9,43 @@
   },
   {
     "number": 2,
+    "displayNumber": 1,
     "title": "The Diagnosis (Part 2)",
     "file": "chapter1-part2.txt"
   },
   {
     "number": 3,
+    "displayNumber": 3,
     "title": "An Oxygen Tent and a Chocolate Milkshake",
     "file": "chapter3.txt"
   },
   {
     "number": 4,
+    "displayNumber": 7,
     "title": "Star Patient Surprises Everyone (Part 1)",
     "file": "chapter7-part1.txt"
   },
   {
     "number": 5,
+    "displayNumber": 7,
     "title": "Star Patient Surprises Everyone (Part 2)",
     "file": "chapter7-part2.txt"
   },
   {
     "number": 6,
+    "displayNumber": 13,
     "title": "The Great Accordion Concert",
     "file": "chapter13.txt"
   },
   {
     "number": 7,
+    "displayNumber": 14,
     "title": "Good-bye, Silver; Hello, Sticks",
     "file": "chapter14.txt"
   },
   {
     "number": 8,
+    "displayNumber": 18,
     "title": "Back to School",
     "file": "chapter18.txt"
   }
