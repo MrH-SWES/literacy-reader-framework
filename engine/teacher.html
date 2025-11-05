@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Book Selector – Literacy Reader Framework</title>
+  <link rel="stylesheet" href="base.css">
+  <style>
+    main {
+      max-width: 800px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 2rem 3rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,.1);
+    }
+    h1 {
+      font-family: Lexend, sans-serif;
+      font-weight: 600;
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #1e1b15;
+    }
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+    .book-card {
+      background: #f9f6f1;
+      border: 1px solid #e1d7c7;
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,.05);
+    }
+    .book-card img {
+      width: 100%;
+      max-width: 150px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.15);
+      margin-bottom: 1rem;
+    }
+    .book-title {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.25rem;
+      color: #1e1b15;
+    }
+    .book-author {
+      font-style: italic;
+      color: #555;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
+    .book-card a {
+      display: inline-block;
+      text-decoration: none;
+      background: #3d5a80;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    .book-card a:hover {
+      background: #27496d;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Teacher Book Selector</h1>
+    <div class="book-grid" id="book-grid">Loading...</div>
+  </main>
+
+  <script>
+    const grid = document.getElementById("book-grid");
+
+    // Define books manually or read dynamically later
+    const books = [
+      {
+        id: "suqua",
+        title: "Daughter of Suqua",
+        author: "Diane Johnston Hamm",
+        cover: "../books/suqua/assets/suqua-cover.jpg"
+      },
+      {
+        id: "polio",
+        title: "Small Steps: The Year I Got Polio",
+        author: "Peg Kehret",
+        cover: "../books/polio/assets/polio-cover.jpg"
+      }
+    ];
+
+    grid.innerHTML = books.map(book => `
+      <div class="book-card">
+        <img src="${book.cover}" alt="${book.title} cover">
+        <div class="book-title">${book.title}</div>
+        <div class="book-author">${book.author}</div>
+        <a href="chapter.html?book=${book.id}">Open Reader</a>
+      </div>
+    `).join("");
+  </script>
+</body>
+</html>
