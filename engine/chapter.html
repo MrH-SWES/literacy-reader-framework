@@ -36,13 +36,14 @@
   
   <!-- Handle dynamic back button -->
   <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const bookName = urlParams.get("book");
+    const backUrlParams = new URLSearchParams(window.location.search);
+    const backBookName = backUrlParams.get("book");
     const backLink = document.getElementById("back-to-toc");
-    if (backLink && bookName) {
-      backLink.href = `../books/${bookName}/index.html`;
+    if (backLink && backBookName) {
+      backLink.href = `../books/${backBookName}/index.html`;
+    } else {
+      backLink.href = "teacher.html";
     }
   </script>
-</body>
 </body>
 </html>
