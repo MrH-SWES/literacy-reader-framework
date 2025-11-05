@@ -44,6 +44,14 @@
 
     .chapter-content p:first-of-type { text-indent: 0; }
 
+    .chapter-image {
+      display: block;
+      margin: 1.5rem auto;
+      max-width: 80%;
+      border-radius: 4px;
+      box-shadow: 0 1px 8px rgba(0,0,0,0.1);
+    }
+
     .page-number {
       text-align: center;
       color: #777;
@@ -103,6 +111,9 @@
     h1, h2, h3 { text-align: center; }
     .chapter-author { text-align: center; color: #666; font-style: italic; margin-bottom: 1rem; }
     hr.title-divider { margin: 1rem auto 2rem; width: 60%; }
+
+    /* Hide back link on contents page for student view */
+    body.contents-only .back-link { display: none; }
   </style>
 </head>
 <body>
@@ -126,7 +137,10 @@
     const book = params.get("book");
     const chapterFile = params.get("chapter");
     const standalone = params.get("standalone") === "true";
+    const student = params.get("student") === "true"; // new mode toggle
+
     if (standalone) document.body.classList.add("standalone");
+    if (!chapterFile && student) document.body.classList.add("contents-only");
 
     async function loadManifest() {
       const manifestPath = `../books/${book}/manifest.json`;
@@ -149,8 +163,8 @@
         const num = ch.displayNumber || ch.number;
         const a = document.createElement("a");
         a.className = "chapter-item";
-        a.href = `reader.html?book=${book}&chapter=${ch.file}`;
-        a.textContent = `Chapter ${num}: ${ch.title}`;
+        a.href = `reader.html?book=${book}&chapter=${ch.file}${student ? "&student=true" : ""}`;
+        a.textContent = num ? `Chapter ${num}: ${ch.title}` : ch.title;
         list.appendChild(a);
       });
 
@@ -162,19 +176,24 @@
       const chapterInfo = manifest.find(c => c.file === chapterFile);
       const titleEl = document.getElementById("chapter-title");
 
-      if (chapterInfo) {
-        const num = chapterInfo.displayNumber || chapterInfo.number;
-        const bookTitle = chapterInfo.bookTitle || manifest[0]?.bookTitle || "";
-        const author = chapterInfo.author || manifest[0]?.author || "";
-        titleEl.innerHTML = `
-          <h1>${bookTitle}</h1>
-          <h2>Chapter ${num}: ${chapterInfo.title}</h2>
-          <div class="chapter-author">by ${author}</div>
-          <hr class="title-divider">
-        `;
-      }
+      const num = chapterInfo?.displayNumber || chapterInfo?.number || "";
+      const bookTitle = chapterInfo?.bookTitle || manifest[0]?.bookTitle || "";
+      const author = chapterInfo?.author || manifest[0]?.author || "";
 
-      const text = await fetch(`../books/${book}/chapters/${chapterFile}`).then(r => r.text());
+      titleEl.innerHTML = `
+        <h1>${bookTitle}</h1>
+        <h2>${num ? `Chapter ${num}: ` : ""}${chapterInfo?.title || ""}</h2>
+        <div class="chapter-author">by ${author}</div>
+        <hr class="title-divider">
+      `;
+
+      let text = await fetch(`../books/${book}/chapters/${chapterFile}`).then(r => r.text());
+
+      // Inject page images if tagged like [image: page-24.jpg]
+      text = text.replace(/\[image:\s*([^\]]+)\]/g, (_, img) =>
+        `<img src="../books/${book}/assets/${img.trim()}" class="chapter-image" alt="">`
+      );
+
       document.querySelector(".chapter-content").innerHTML = text;
     }
 
