@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     // Try to fetch a manifest of all books from the /books folder
     // (if you ever add one later). Otherwise, we'll discover them dynamically.
-    const booksDir = "../books";
+    const booksDir = "./books";
 
     // Dynamically discover book folders
     const response = await fetch(booksDir);
