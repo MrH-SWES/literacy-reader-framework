@@ -5,24 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reading Portal</title>
   <link rel="stylesheet" href="base.css" />
+  
+  <!-- Load book-specific theme -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookName = urlParams.get("book");
+    if (bookName) {
+      const themeLink = document.createElement("link");
+      themeLink.rel = "stylesheet";
+      themeLink.href = `../books/${bookName}/theme.css`;
+      document.head.appendChild(themeLink);
+    }
+  </script>
 </head>
 <body>
   <header class="chapter-header">
     <a href="teacher.html" class="back-link">← Back to Library</a>
     <h1 id="chapter-title">Loading...</h1>
   </header>
-
   <main class="chapter-container first-page">
     <div class="chapter-content"></div>
     <div id="glossary-popup-container" aria-live="polite"></div>
   </main>
-
   <footer class="nav-bar">
     <button id="prev">Previous</button>
     <span class="page-number">Page 1</span>
     <button id="next">Next</button>
   </footer>
-
   <script src="script.js"></script>
 </body>
 </html>
