@@ -6,15 +6,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const chapterTitleEl = document.getElementById("chapter-title");
   const chapterListEl = document.getElementById("chapter-list");
 
-  // --- Context ------------------------------------------------------------
   const isReaderView = !!chapterContainer;
   const urlParams = new URLSearchParams(window.location.search);
   const book = urlParams.get("book") || "suqua";
   const chapterFile = urlParams.get("chapter");
 
-  const CHAPTERS_PATH = `../books/${book}/chapters/`;
-  const GLOSSARY_PATH = `../books/${book}/glossary.json`;
-  const MANIFEST_PATH = `../books/${book}/chapters/manifest.json`;
+  // Compute paths relative to current location
+  const basePath =
+    window.location.pathname.includes("/engine/") ||
+    window.location.pathname.endsWith("reader.html")
+      ? "../books"
+      : "./books";
+
+  const CHAPTERS_PATH = `${basePath}/${book}/chapters/`;
+  const GLOSSARY_PATH = `${basePath}/${book}/glossary.json`;
+  const MANIFEST_PATH = `${basePath}/${book}/chapters/manifest.json`;
 
   let glossary = {};
   let pages = [];
@@ -23,18 +29,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
   // ========================================================================
-  // -------------------------- CONTENTS PAGE -------------------------------
+  // ---------------------------- CONTENTS PAGE -----------------------------
   // ========================================================================
   if (chapterListEl && !isReaderView) {
     fetch(MANIFEST_PATH)
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`Manifest not found at ${MANIFEST_PATH}`);
+        return r.json();
+      })
       .then((manifest) => {
+        if (!Array.isArray(manifest)) throw new Error("Invalid manifest format");
         chapterListEl.innerHTML = manifest
           .map((ch) => {
             const num = ch.displayNumber ?? ch.number;
-            const displayTitle = num
-              ? `Chapter ${num}: ${ch.title}`
-              : ch.title;
+            const numberLabel = num ? `Chapter ${num}: ` : "";
+            const displayTitle = `${numberLabel}${ch.title}`;
             return `
               <a href="../engine/reader.html?book=${book}&chapter=${ch.file}" class="chapter-link">
                 <div class="chapter-card">
@@ -47,12 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((err) => {
         chapterListEl.innerHTML = `<p class="error">Error loading chapters: ${err.message}</p>`;
+        console.error("Manifest load failed:", err);
       });
     return;
   }
 
   // ========================================================================
-  // ---------------------------- READER PAGE -------------------------------
+  // ----------------------------- READER PAGE ------------------------------
   // ========================================================================
   if (!chapterContainer) return;
 
@@ -220,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const page = pages[currentPage];
     let html = page.content;
 
-    // Embedded images: [image: filename | width | align]
+    // Embedded images
     html = html.replace(
       /\[image:\s*([^\|\]\s]+)(?:\s*\|\s*([^\|\]\s]+))?(?:\s*\|\s*(left|right|center))?\s*\]/gi,
       (_, file, width, align) => {
@@ -233,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (align === "right")
           styleParts.push("float:right;margin:0 0 1rem 1rem;");
         const style = styleParts.join("");
-        return `<img src="../books/${book}/assets/${file}" alt="" class="chapter-illustration" style="${style}">`;
+        return `<img src="${basePath}/${book}/assets/${file}" alt="" class="chapter-illustration" style="${style}">`;
       }
     );
 
@@ -294,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.title = `${bookTitle} — Chapter ${chapterNum}`;
   }
 
-  // --- Load Everything ----------------------------------------------------
+  // --- Load Data ----------------------------------------------------------
   Promise.all([
     fetch(GLOSSARY_PATH).then((r) => (r.ok ? r.json() : {})),
     fetch(MANIFEST_PATH).then((r) => (r.ok ? r.json() : [])),
