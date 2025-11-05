@@ -4,13 +4,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const prevButton = document.getElementById("prev");
   const nextButton = document.getElementById("next");
   const chapterTitleEl = document.getElementById("chapter-title");
+  const chapterListEl = document.getElementById("chapter-list");
 
-  if (!chapterContainer) return;
-
-  // --- Book + Chapter Context ---------------------------------------------
+  // --- Page vs. Library Detection -----------------------------------------
+  const isReaderView = !!chapterContainer;
   const urlParams = new URLSearchParams(window.location.search);
   const book = urlParams.get("book") || "suqua";
-  const chapterFile = urlParams.get("chapter") || "chapter1.txt";
+  const chapterFile = urlParams.get("chapter");
 
   const CHAPTERS_PATH = `../books/${book}/chapters/`;
   const GLOSSARY_PATH = `../books/${book}/glossary.json`;
@@ -21,6 +21,40 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentPage = 0;
 
   const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // ========================================================================
+  // ------------------------- CONTENTS PAGE LOGIC --------------------------
+  // ========================================================================
+
+  if (chapterListEl && !isReaderView) {
+    fetch(MANIFEST_PATH)
+      .then((r) => r.json())
+      .then((manifest) => {
+        chapterListEl.innerHTML = manifest
+          .map((ch) => {
+            const num = ch.displayNumber ?? ch.number;
+            return `
+              <a href="../engine/reader.html?book=${book}&chapter=${ch.file}" class="chapter-link">
+                <div class="chapter-card">
+                  <span class="chapter-number">Chapter ${num}:</span>
+                  <span class="chapter-title">${ch.title}</span>
+                </div>
+              </a>
+            `;
+          })
+          .join("");
+      })
+      .catch((err) => {
+        chapterListEl.innerHTML = `<p class="error">Error loading chapters: ${err.message}</p>`;
+      });
+    return;
+  }
+
+  // ========================================================================
+  // -------------------------- READER PAGE LOGIC ---------------------------
+  // ========================================================================
+
+  if (!chapterContainer) return;
 
   // --- Paragraph + Glossary Rendering -------------------------------------
   function makeParagraphHTML(rawText) {
@@ -186,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const page = pages[currentPage];
     let html = page.content;
 
-    // Handle embedded images with syntax: [image: filename | width | align]
+    // Handle embedded images: [image: file | width | align]
     html = html.replace(
       /\[image:\s*([^\|\]\s]+)(?:\s*\|\s*([^\|\]\s]+))?(?:\s*\|\s*(left|right|center))?\s*\]/gi,
       (_, file, width, align) => {
@@ -218,8 +252,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Header Renderer ----------------------------------------------------
   function renderChapterHeader(chapterInfo, chapterTitleEl, manifestData) {
-    // Fix: Adjust numbering for multi-part chapters
-    let chapterNum = chapterInfo.number ?? 1;
+    // Prefer explicit displayNumber over sequence number
+    let chapterNum = chapterInfo.displayNumber ?? chapterInfo.number ?? 1;
+
+    // Multi-part chapters share same number
     if (/\(Part\s*\d+\)/i.test(chapterInfo.title || "")) {
       const idx = Array.isArray(manifestData)
         ? manifestData.indexOf(chapterInfo)
@@ -229,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const basePrev = prev.title ? prev.title.split("(Part")[0].trim() : "";
         const baseCurr = chapterInfo.title.split("(Part")[0].trim();
         if (basePrev && baseCurr && basePrev === baseCurr) {
-          chapterNum = prev.number;
+          chapterNum = prev.displayNumber ?? prev.number ?? chapterNum;
         }
       }
     }
@@ -271,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (chapterInfo && chapterTitleEl)
         renderChapterHeader(chapterInfo, chapterTitleEl, manifestData);
 
-      // Remove redundant header lines
+      // Strip redundant header lines
       chapterText = chapterText.replace(
         /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
         ""
@@ -310,7 +346,8 @@ document.addEventListener("DOMContentLoaded", () => {
       renderPage();
     })
     .catch((err) => {
-      chapterContainer.innerHTML = `<p class="error">Error loading page: ${err.message}</p>`;
+      if (chapterContainer)
+        chapterContainer.innerHTML = `<p class="error">Error loading page: ${err.message}</p>`;
       if (chapterTitleEl) chapterTitleEl.textContent = "Error";
       console.error(err);
     });
