@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reader – Literacy Reader Framework</title>
   <link rel="stylesheet" href="base.css" />
-  <link rel="stylesheet" href="polio.css" />
   <style>
     body {
       font-family: 'Lexend', sans-serif;
@@ -79,20 +78,38 @@
     button:hover:not(:disabled) { background-color: #0077aa; }
     button:disabled { background-color: #ccc; cursor: not-allowed; }
 
+    /* Hide when standalone */
     body.standalone .back-link,
     body.standalone .nav-bar { display: none; }
 
-    body.standalone {
-      padding-top: 2rem;
+    body.standalone { padding-top: 2rem; }
+
+    /* Contents view styles */
+    .chapter-list {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
     }
+
+    .chapter-item {
+      display: block;
+      background: white;
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      text-decoration: none;
+      color: #111;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      transition: background 0.2s;
+    }
+    .chapter-item:hover { background: #f0f8ff; }
   </style>
 </head>
 
 <body>
-  <a id="back-link" href="../books/polio/index.html" class="back-link">← Back to Contents</a>
-
+  <a id="back-link" href="../books/index.html" class="back-link">← Back to Library</a>
   <div id="chapter-title" class="chapter-header"></div>
-
   <main class="chapter-container">
     <div id="glossary-popup-container"></div>
     <div class="chapter-content"></div>
@@ -104,14 +121,65 @@
     <button id="next">Next</button>
   </div>
 
-  <script src="script.js"></script>
-
   <script>
-    // Hide navigation + back link when ?standalone=true
     const params = new URLSearchParams(window.location.search);
-    if (params.get("standalone") === "true") {
-      document.body.classList.add("standalone");
+    const book = params.get("book");
+    const chapterFile = params.get("chapter");
+    const standalone = params.get("standalone") === "true";
+
+    if (standalone) document.body.classList.add("standalone");
+
+    async function loadManifest() {
+      const manifestPath = `../books/${book}/manifest.json`;
+      const res = await fetch(manifestPath);
+      return res.json();
     }
+
+    async function renderContents(manifest) {
+      const header = document.getElementById("chapter-title");
+      const bookTitle = manifest[0]?.bookTitle || "Untitled Book";
+      const author = manifest[0]?.author || "";
+      header.innerHTML = `
+        <h1 style="text-align:center;">${bookTitle}</h1>
+        <p style="text-align:center;color:#666;">by ${author}</p>
+      `;
+
+      const list = document.createElement("div");
+      list.className = "chapter-list";
+      manifest.forEach(ch => {
+        const num = ch.displayNumber || ch.number;
+        const a = document.createElement("a");
+        a.className = "chapter-item";
+        a.href = `teacher.html?book=${book}&chapter=${ch.file}`;
+        a.textContent = `Chapter ${num}: ${ch.title}`;
+        list.appendChild(a);
+      });
+      document.querySelector(".chapter-container").replaceWith(list);
+    }
+
+    async function renderChapter(manifest) {
+      const chapterInfo = manifest.find(c => c.file === chapterFile);
+      const titleEl = document.getElementById("chapter-title");
+
+      if (chapterInfo) {
+        const num = chapterInfo.displayNumber || chapterInfo.number;
+        titleEl.innerHTML = `
+          <div class="book-series">${chapterInfo.series || ""}</div>
+          <div class="book-main-title">${chapterInfo.bookTitle || ""}</div>
+          <div class="chapter-subtitle">Chapter ${num}: ${chapterInfo.title}</div>
+          <div class="chapter-author">by ${chapterInfo.author || ""}</div>
+          <hr class="title-divider">
+        `;
+      }
+
+      const text = await fetch(`../books/${book}/chapters/${chapterFile}`).then(r => r.text());
+      document.querySelector(".chapter-content").innerHTML = text;
+    }
+
+    loadManifest().then(manifest => {
+      if (!chapterFile) renderContents(manifest);
+      else renderChapter(manifest);
+    });
   </script>
 </body>
 </html>
