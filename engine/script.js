@@ -199,7 +199,7 @@ document.addEventListener("DOMContentLoaded", () => {
         else if (align === "right")
           styleParts.push("float:right;margin:0 0 1rem 1rem;");
         const style = styleParts.join("");
-        return `<img src="../books/${book}/images/${file}" alt="" class="chapter-illustration" style="${style}">`;
+        return `<img src="../books/${book}/assets/${file}" alt="" class="chapter-illustration" style="${style}">`;
       }
     );
 
