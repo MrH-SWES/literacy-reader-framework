@@ -7,9 +7,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!chapterContainer) return;
 
-  // --- Book + Chapter Context ---------------------------------------------
   const urlParams = new URLSearchParams(window.location.search);
-  const book = urlParams.get("book") || "suqua"; // default book
+  const book = urlParams.get("book") || "suqua";
   const chapterFile = urlParams.get("chapter") || "chapter1.txt";
 
   const CHAPTERS_PATH = `../books/${book}/chapters/`;
@@ -184,7 +183,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderPage() {
     if (!pages.length) return;
     const page = pages[currentPage];
-
     pageNumberDisplay.textContent = `Page ${page.number}`;
     chapterContainer.innerHTML = makeParagraphHTML(page.content);
     enhanceGlossary();
@@ -209,12 +207,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     chapterTitleEl.innerHTML = `
       <div class="chapter-header">
-        <p class="book-series">${series}</p>
-        <h1 class="book-main-title">${bookTitle}</h1>
-        <h2 class="chapter-subtitle">${
+        <p class="book-series" style="font-size:1.05rem; color:#000; font-weight:normal; margin:0 0 0.2rem 0;">${series}</p>
+        <h1 class="book-main-title" style="margin:0; font-size:2.2rem;">${bookTitle}</h1>
+        <h2 class="chapter-subtitle" style="margin:0.5rem 0 0.75rem 0;">${
           number ? `Chapter ${number}: ${title}` : title
         }</h2>
-        <p class="chapter-author">by ${author}</p>
+        <p class="chapter-author" style="margin:0.25rem 0 1.5rem 0; font-size:0.95rem; font-style:italic; color:#555;">by ${author}</p>
       </div>
       <hr class="title-divider">
     `;
@@ -237,11 +235,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const chapterInfo = Array.isArray(manifestData)
         ? manifestData.find((ch) => ch.file === chapterFile)
         : null;
-      if (chapterInfo && chapterTitleEl) {
-        renderChapterHeader(chapterInfo, chapterTitleEl);
-      } else if (chapterTitleEl) {
-        chapterTitleEl.textContent = "Chapter";
-      }
+
+      if (chapterInfo && chapterTitleEl) renderChapterHeader(chapterInfo, chapterTitleEl);
+
+      // remove header repetition from file text
+      chapterText = chapterText.replace(
+        /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
+        ""
+      );
 
       const pageRegex = /\[startPage=(\d+)\]([\s\S]*?)\[endPage=\1\]/g;
       let m;
