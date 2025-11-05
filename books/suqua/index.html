@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suqua – Table of Contents</title>
+  <link rel="stylesheet" href="theme.css">
+</head>
+<body>
+  <main class="toc-container">
+    <img src="assets/suqua-cover.jpg" alt="Suqua cover" class="book-cover">
+    <h1>Suqua</h1>
+    <h2>by Diane Johnston Hamm</h2>
+
+    <h3>Table of Contents</h3>
+    <ul id="chapter-list"></ul>
+  </main>
+
+  <script>
+    fetch('chapters/manifest.json')
+      .then(r => r.json())
+      .then(chapters => {
+        const list = document.getElementById('chapter-list');
+        chapters.forEach(ch => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `../../engine/chapter.html?book=suqua&chapter=${ch.file}`;
+          a.textContent = ch.title;
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error('Error loading manifest:', err);
+        document.getElementById('chapter-list').textContent = 'Error loading chapters.';
+      });
+  </script>
+</body>
+</html>
