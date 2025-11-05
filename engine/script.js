@@ -1,105 +1,278 @@
-// Shared engine script for modular reading framework
+document.addEventListener("DOMContentLoaded", () => {
+  // =========================================================
+  //  CONFIG: Dynamic Book Loader
+  // =========================================================
+  const urlParams = new URLSearchParams(window.location.search);
+  const bookName = urlParams.get("book") || "suqua"; // default book
+  const chapterFile = urlParams.get("chapter") || "chapter1.txt";
 
-const bookListEl = document.getElementById("book-list");
-const chapterTitleEl = document.getElementById("chapter-title");
-const chapterContentEl = document.getElementById("chapter-content");
+  const BOOK_PATH = `../books/${bookName}/`;
+  const CHAPTERS_PATH = `${BOOK_PATH}chapters/`;
+  const GLOSSARY_PATH = `${BOOK_PATH}glossary.json`;
+  const MANIFEST_PATH = `${CHAPTERS_PATH}manifest.json`;
+  const THEME_PATH = `${BOOK_PATH}theme.css`;
 
-const basePath = "../books/";
-const defaultCover = "default-cover.jpg";
+  // Inject theme dynamically
+  const themeLink = document.createElement("link");
+  themeLink.rel = "stylesheet";
+  themeLink.href = THEME_PATH;
+  document.head.appendChild(themeLink);
 
-// Utility: get query parameters
-function getQueryParam(key) {
-  return new URLSearchParams(window.location.search).get(key);
-}
+  // =========================================================
+  //  ELEMENTS
+  // =========================================================
+  const chapterContainer = document.querySelector(".chapter-content");
+  const pageNumberDisplay = document.querySelector(".page-number");
+  const prevButton = document.getElementById("prev");
+  const nextButton = document.getElementById("next");
+  const chapterTitleEl = document.getElementById("chapter-title");
 
-// ============ LIBRARY PAGE ============
-if (bookListEl) {
-  fetchBooks();
-}
+  if (!chapterContainer) return;
 
-async function fetchBooks() {
-  try {
-    const res = await fetch(basePath);
-    if (!res.ok) throw new Error("Unable to load book list");
-    // GitHub Pages doesn’t allow directory listing — use known manifest fallback
-    const bookDirs = ["suqua", "polio"]; // manually list known folders here for now
+  // =========================================================
+  //  STATE
+  // =========================================================
+  let glossary = {};
+  let pages = [];
+  let currentPage = 0;
 
-    bookListEl.innerHTML = "";
-    for (const dir of bookDirs) {
-      try {
-        const manifestRes = await fetch(`${basePath}${dir}/chapters/manifest.json`);
-        const manifest = manifestRes.ok ? await manifestRes.json() : [];
-        const cover = `${basePath}${dir}/assets/cover.jpg`;
+  // =========================================================
+  //  HELPERS
+  // =========================================================
+  const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
-        const img = document.createElement("img");
-        img.src = cover;
-        img.onerror = () => (img.src = defaultCover);
-        img.alt = `${dir} cover`;
+  function makeParagraphHTML(rawText) {
+    const norm = rawText.replace(/\r/g, "");
 
-        const div = document.createElement("div");
-        div.className = "book-card";
-        div.innerHTML = `<h2>${capitalize(dir)}</h2>`;
-        div.prepend(img);
-        div.onclick = () => window.location.href = `chapter.html?book=${dir}&chapter=1`;
-        bookListEl.appendChild(div);
-      } catch (e) {
-        console.warn(`Could not load manifest for ${dir}`, e);
-      }
+    const parts = norm
+      .split(/(?:\n{2,})|\n(?=\s*[A-Z""'])/g)
+      .map(s =>
+        s
+          .replace(/\s+([,.!?;:])/g, "$1")
+          .replace(/\s+/g, " ")
+          .trim()
+      )
+      .filter(Boolean);
+
+    return parts.map(p => `<p>${renderGlossaryInline(p)}</p>`).join("\n\n");
+  }
+
+  function renderGlossaryInline(text) {
+    if (!glossary || !Object.keys(glossary).length) return text;
+
+    const terms = Object.keys(glossary).sort((a, b) => b.length - a.length);
+    let processed = text;
+
+    for (const original of terms) {
+      const data = glossary[original];
+      if (!data) continue;
+
+      const regex = new RegExp(`\\b(${escapeRegExp(original)})\\b`, "i");
+      const parts = processed.split(/(<span class="glossary-wrap"[^>]*>[\s\S]*?<\/span>)/);
+
+      let foundAndReplaced = false;
+      const newParts = parts.map(part => {
+        if (part.match(/<span class="glossary-wrap"/)) return part;
+
+        if (!foundAndReplaced && regex.test(part)) {
+          foundAndReplaced = true;
+          return part.replace(regex, (match) => {
+            return `<span class="glossary-wrap" data-term="${original.toLowerCase()}">${match}</span>`;
+          });
+        }
+        return part;
+      });
+
+      processed = newParts.join('');
     }
-  } catch (err) {
-    bookListEl.innerHTML = `<p>Error loading books.</p>`;
+    return processed;
   }
-}
 
-function capitalize(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
+  function enhanceGlossary() {
+    const popupContainer = document.getElementById('glossary-popup-container');
+    if (!popupContainer) {
+      console.error('Popup container not found!');
+      return;
+    }
 
-// ============ CHAPTER PAGE ============
-if (chapterTitleEl) {
-  const book = getQueryParam("book");
-  const chapterIndex = parseInt(getQueryParam("chapter") || "1");
-  if (book) loadChapter(book, chapterIndex);
-}
+    let activePopup = null;
+    let activeTerm = null;
 
-async function loadChapter(book, chapterIndex) {
-  try {
-    const manifestRes = await fetch(`${basePath}${book}/chapters/manifest.json`);
-    const manifest = await manifestRes.json();
+    document.querySelectorAll(".glossary-wrap").forEach((wrap) => {
+      const termText = wrap.textContent;
+      const termKey = wrap.getAttribute('data-term');
+      if (!termKey) return;
 
-    const chapter = manifest[chapterIndex - 1];
-    const textRes = await fetch(`${basePath}${book}/chapters/${chapter.file}`);
-    const text = await textRes.text();
+      let data = glossary[termKey];
+      if (!data) {
+        const glossaryKey = Object.keys(glossary).find(key => key.toLowerCase() === termKey.toLowerCase());
+        if (glossaryKey) data = glossary[glossaryKey];
+      }
+      if (!data) return;
 
-    // Apply book-specific theme
-    const themePath = `${basePath}${book}/theme.css`;
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = themePath;
-    document.head.appendChild(link);
+      const defText = typeof data === "object" ? data.definition : String(data);
+      const imgHtml = typeof data === "object" && data.image
+        ? `<img src="${data.image}" alt="${termText}" class="glossary-image" role="presentation">`
+        : "";
 
-    chapterTitleEl.textContent = chapter.title;
-    chapterContentEl.innerHTML = text
-      .split("\n")
-      .map(p => `<p>${p}</p>`)
-      .join("");
+      wrap.classList.add('glossary-term');
+      wrap.setAttribute('role', 'button');
+      wrap.setAttribute('tabindex', '0');
 
-    // Buttons
-    const prevBtn = document.getElementById("prev-btn");
-    const nextBtn = document.getElementById("next-btn");
+      const showPopup = (e) => {
+        e.stopPropagation();
 
-    prevBtn.onclick = () => {
-      if (chapterIndex > 1)
-        window.location.href = `chapter.html?book=${book}&chapter=${chapterIndex - 1}`;
-    };
+        if (activePopup) {
+          activePopup.remove();
+          activePopup = null;
+          if (activeTerm) activeTerm.classList.remove('active');
+        }
 
-    nextBtn.onclick = () => {
-      if (chapterIndex < manifest.length)
-        window.location.href = `chapter.html?book=${book}&chapter=${chapterIndex + 1}`;
-    };
+        const popup = document.createElement('div');
+        popup.className = 'glossary-popup';
+        popup.setAttribute('role', 'dialog');
+        popup.setAttribute('aria-label', `Definition of ${termText}`);
+        popup.innerHTML = `
+          <div class="glossary-popup-content">
+            <button class="glossary-popup-close" aria-hidden="true" tabindex="-1">×</button>
+            <div class="glossary-popup-text">${defText}</div>
+            ${imgHtml}
+          </div>
+        `;
+        popupContainer.appendChild(popup);
 
-  } catch (err) {
-    console.error("Error loading chapter:", err);
-    chapterContentEl.innerHTML = `<p>Error loading this chapter.</p>`;
+        activePopup = popup;
+        activeTerm = wrap;
+        wrap.classList.add('active');
+
+        const closeBtn = popup.querySelector('.glossary-popup-close');
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          popup.remove();
+          activePopup = null;
+          wrap.classList.remove('active');
+          activeTerm = null;
+          wrap.focus();
+        });
+
+        popupContainer.setAttribute('aria-live', 'assertive');
+        setTimeout(() => popupContainer.setAttribute('aria-live', 'polite'), 100);
+        setTimeout(() => closeBtn.focus(), 50);
+      };
+
+      wrap.addEventListener('click', showPopup);
+      wrap.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          showPopup(e);
+        }
+      });
+    });
+
+    document.addEventListener('click', (e) => {
+      if (activePopup && !e.target.closest('.glossary-popup') && !e.target.closest('.glossary-wrap')) {
+        activePopup.remove();
+        activePopup = null;
+        if (activeTerm) {
+          activeTerm.classList.remove('active');
+          activeTerm = null;
+        }
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && activePopup) {
+        activePopup.remove();
+        activePopup = null;
+        if (activeTerm) {
+          activeTerm.classList.remove('active');
+          activeTerm.focus();
+          activeTerm = null;
+        }
+      }
+    });
   }
-}
+
+  function renderPage() {
+    if (!pages.length) return;
+    const page = pages[currentPage];
+
+    pageNumberDisplay.textContent = `Page ${page.number}`;
+    chapterContainer.innerHTML = makeParagraphHTML(page.content);
+    enhanceGlossary();
+
+    const wrapper = document.querySelector(".chapter-container");
+    if (currentPage === 0) wrapper.classList.add("first-page");
+    else wrapper.classList.remove("first-page");
+
+    localStorage.setItem(`page-${bookName}-${chapterFile}`, currentPage);
+    prevButton.disabled = currentPage === 0;
+    nextButton.disabled = currentPage === pages.length - 1;
+  }
+
+  // =========================================================
+  //  FETCH DATA
+  // =========================================================
+  Promise.all([
+    fetch(GLOSSARY_PATH)
+      .then((r) => (r.ok ? r.json() : {}))
+      .catch(() => ({})),
+
+    fetch(MANIFEST_PATH)
+      .then((r) => (r.ok ? r.json() : []))
+      .catch(() => []),
+
+    fetch(`${CHAPTERS_PATH}${chapterFile}`)
+      .then((r) => {
+        if (!r.ok) throw new Error(`Failed to load ${chapterFile}`);
+        return r.text();
+      }),
+  ])
+    .then(([glossaryData, manifestData, chapterText]) => {
+      glossary = glossaryData || {};
+
+      const chapterInfo = Array.isArray(manifestData)
+        ? manifestData.find((ch) => ch.file === chapterFile)
+        : null;
+      if (chapterInfo && chapterTitleEl) {
+        chapterTitleEl.textContent = chapterInfo.title || "Chapter";
+      }
+
+      const pageRegex = /\[startPage=(\d+)\]([\s\S]*?)\[endPage=\1\]/g;
+      let m;
+      while ((m = pageRegex.exec(chapterText)) !== null) {
+        pages.push({ number: parseInt(m[1], 10), content: m[2].trim() });
+      }
+
+      if (!pages.length) {
+        chapterContainer.innerHTML =
+          '<p class="error">Error: No valid [startPage]/[endPage] markers found.</p>';
+        return;
+      }
+
+      currentPage =
+        parseInt(localStorage.getItem(`page-${bookName}-${chapterFile}`), 10) || 0;
+      if (currentPage >= pages.length) currentPage = 0;
+
+      prevButton.addEventListener("click", () => {
+        if (currentPage > 0) {
+          currentPage--;
+          renderPage();
+        }
+      });
+
+      nextButton.addEventListener("click", () => {
+        if (currentPage < pages.length - 1) {
+          currentPage++;
+          renderPage();
+        }
+      });
+
+      renderPage();
+    })
+    .catch((err) => {
+      chapterContainer.innerHTML = `<p class="error">Error loading page: ${err.message}</p>`;
+      if (chapterTitleEl) chapterTitleEl.textContent = "Error";
+      console.error(err);
+    });
+});
