@@ -3,78 +3,115 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Library – Literacy Reader Framework</title>
+  <title>Reader – Literacy Reader Framework</title>
   <link rel="stylesheet" href="base.css" />
+  <link rel="stylesheet" href="polio.css" />
   <style>
     body {
       font-family: 'Lexend', sans-serif;
       background: #fafafa;
       margin: 0;
       padding: 2rem;
+      color: #111;
     }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .book-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 1.5rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-
-    .book-card {
-      display: block;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .back-link {
+      display: inline-block;
+      font-family: 'Trebuchet MS', sans-serif;
+      color: #0099cc;
       text-decoration: none;
-      color: #222;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .book-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-
-    .book-card img {
-      width: 100%;
-      border-radius: 10px 10px 0 0;
-      height: 280px;
-      object-fit: cover;
-    }
-
-    .book-info {
-      padding: 0.8rem 1rem 1rem;
-    }
-
-    .book-title {
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    .book-author {
-      color: #666;
+      margin-bottom: 1.5rem;
       font-size: 0.9rem;
     }
+    .back-link:hover { text-decoration: underline; }
 
-    #loading {
+    .chapter-container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .chapter-content p {
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: 15px;
+      line-height: 1.75;
+      text-align: justify;
+      text-indent: 2em;
+      margin: 0 0 0.75rem 0;
+    }
+
+    .chapter-content p:first-of-type {
+      text-indent: 0;
+    }
+
+    .page-number {
       text-align: center;
-      font-size: 1.1rem;
       color: #777;
-      margin-top: 2rem;
+      font-family: 'Trebuchet MS', sans-serif;
+      margin: 1.5rem 0 0.75rem;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem auto 0;
+      max-width: 640px;
+      border-top: 1px solid #ccc;
+      padding-top: 1.25rem;
+    }
+
+    button {
+      font-family: 'Trebuchet MS', sans-serif;
+      background-color: #0099cc;
+      color: white;
+      border: none;
+      padding: 0.65rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+    button:hover:not(:disabled) { background-color: #0077aa; }
+    button:disabled { background-color: #ccc; cursor: not-allowed; }
+
+    body.standalone .back-link,
+    body.standalone .nav-bar { display: none; }
+
+    body.standalone {
+      padding-top: 2rem;
     }
   </style>
 </head>
-<body>
-  <h1>Reading Library</h1>
-  <div id="loading">Loading books...</div>
-  <div id="book-grid" class="book-grid"></div>
 
-  <script src="teacher.js"></script>
+<body>
+  <a id="back-link" href="../books/polio/index.html" class="back-link">← Back to Contents</a>
+
+  <div id="chapter-title" class="chapter-header"></div>
+
+  <main class="chapter-container">
+    <div id="glossary-popup-container"></div>
+    <div class="chapter-content"></div>
+    <div class="page-number"></div>
+  </main>
+
+  <div class="nav-bar">
+    <button id="prev">Previous</button>
+    <button id="next">Next</button>
+  </div>
+
+  <script src="script.js"></script>
+
+  <script>
+    // Hide navigation + back link when ?standalone=true
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("standalone") === "true") {
+      document.body.classList.add("standalone");
+    }
+  </script>
 </body>
 </html>
