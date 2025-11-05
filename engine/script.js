@@ -1,26 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // =========================================================
-  //  CONFIG: Dynamic Book Loader
-  // =========================================================
-  const urlParams = new URLSearchParams(window.location.search);
-  const bookName = urlParams.get("book") || "suqua"; // default book
-  const chapterFile = urlParams.get("chapter") || "chapter1.txt";
-
-  const BOOK_PATH = `../books/${bookName}/`;
-  const CHAPTERS_PATH = `${BOOK_PATH}chapters/`;
-  const GLOSSARY_PATH = `${BOOK_PATH}glossary.json`;
-  const MANIFEST_PATH = `${CHAPTERS_PATH}manifest.json`;
-  const THEME_PATH = `${BOOK_PATH}theme.css`;
-
-  // Inject theme dynamically
-  const themeLink = document.createElement("link");
-  themeLink.rel = "stylesheet";
-  themeLink.href = THEME_PATH;
-  document.head.appendChild(themeLink);
-
-  // =========================================================
-  //  ELEMENTS
-  // =========================================================
   const chapterContainer = document.querySelector(".chapter-content");
   const pageNumberDisplay = document.querySelector(".page-number");
   const prevButton = document.getElementById("prev");
@@ -29,21 +7,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (!chapterContainer) return;
 
-  // =========================================================
-  //  STATE
-  // =========================================================
+  // --- Book + Chapter Context ---------------------------------------------
+  const urlParams = new URLSearchParams(window.location.search);
+  const book = urlParams.get("book") || "suqua"; // default book
+  const chapterFile = urlParams.get("chapter") || "chapter1.txt";
+
+  const CHAPTERS_PATH = `../books/${book}/chapters/`;
+  const GLOSSARY_PATH = `../books/${book}/glossary.json`;
+  const MANIFEST_PATH = `../books/${book}/chapters/manifest.json`;
+
   let glossary = {};
   let pages = [];
   let currentPage = 0;
 
-  // =========================================================
-  //  HELPERS
-  // =========================================================
   const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+  // --- Paragraph + Glossary Rendering -------------------------------------
   function makeParagraphHTML(rawText) {
     const norm = rawText.replace(/\r/g, "");
-
     const parts = norm
       .split(/(?:\n{2,})|\n(?=\s*[A-Z""'])/g)
       .map(s =>
@@ -53,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
           .trim()
       )
       .filter(Boolean);
-
     return parts.map(p => `<p>${renderGlossaryInline(p)}</p>`).join("\n\n");
   }
 
@@ -73,27 +53,25 @@ document.addEventListener("DOMContentLoaded", () => {
       let foundAndReplaced = false;
       const newParts = parts.map(part => {
         if (part.match(/<span class="glossary-wrap"/)) return part;
-
         if (!foundAndReplaced && regex.test(part)) {
           foundAndReplaced = true;
-          return part.replace(regex, (match) => {
-            return `<span class="glossary-wrap" data-term="${original.toLowerCase()}">${match}</span>`;
-          });
+          return part.replace(regex, match =>
+            `<span class="glossary-wrap" data-term="${original.toLowerCase()}">${match}</span>`
+          );
         }
         return part;
       });
 
       processed = newParts.join('');
     }
+
     return processed;
   }
 
+  // --- Glossary Popup -----------------------------------------------------
   function enhanceGlossary() {
     const popupContainer = document.getElementById('glossary-popup-container');
-    if (!popupContainer) {
-      console.error('Popup container not found!');
-      return;
-    }
+    if (!popupContainer) return;
 
     let activePopup = null;
     let activeTerm = null;
@@ -105,7 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       let data = glossary[termKey];
       if (!data) {
-        const glossaryKey = Object.keys(glossary).find(key => key.toLowerCase() === termKey.toLowerCase());
+        const glossaryKey = Object.keys(glossary).find(
+          key => key.toLowerCase() === termKey.toLowerCase()
+        );
         if (glossaryKey) data = glossary[glossaryKey];
       }
       if (!data) return;
@@ -121,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const showPopup = (e) => {
         e.stopPropagation();
-
         if (activePopup) {
           activePopup.remove();
           activePopup = null;
@@ -139,8 +118,8 @@ document.addEventListener("DOMContentLoaded", () => {
             ${imgHtml}
           </div>
         `;
-        popupContainer.appendChild(popup);
 
+        popupContainer.appendChild(popup);
         activePopup = popup;
         activeTerm = wrap;
         wrap.classList.add('active');
@@ -155,8 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
           wrap.focus();
         });
 
-        popupContainer.setAttribute('aria-live', 'assertive');
-        setTimeout(() => popupContainer.setAttribute('aria-live', 'polite'), 100);
         setTimeout(() => closeBtn.focus(), 50);
       };
 
@@ -193,6 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // --- Page Rendering -----------------------------------------------------
   function renderPage() {
     if (!pages.length) return;
     const page = pages[currentPage];
@@ -205,35 +183,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentPage === 0) wrapper.classList.add("first-page");
     else wrapper.classList.remove("first-page");
 
-    localStorage.setItem(`page-${bookName}-${chapterFile}`, currentPage);
+    localStorage.setItem(`page-${book}-${chapterFile}`, currentPage);
     prevButton.disabled = currentPage === 0;
     nextButton.disabled = currentPage === pages.length - 1;
   }
 
-  // =========================================================
-  //  FETCH DATA
-  // =========================================================
+  // --- Load Data ----------------------------------------------------------
   Promise.all([
-    fetch(GLOSSARY_PATH)
-      .then((r) => (r.ok ? r.json() : {}))
-      .catch(() => ({})),
-
-    fetch(MANIFEST_PATH)
-      .then((r) => (r.ok ? r.json() : []))
-      .catch(() => []),
-
-    fetch(`${CHAPTERS_PATH}${chapterFile}`)
-    .then((r) => {
+    fetch(GLOSSARY_PATH).then(r => r.ok ? r.json() : {}),
+    fetch(MANIFEST_PATH).then(r => r.ok ? r.json() : []),
+    fetch(`${CHAPTERS_PATH}${chapterFile}`).then(r => {
       if (!r.ok) throw new Error(`Failed to load ${chapterFile}`);
       return r.text();
     })
-,
   ])
     .then(([glossaryData, manifestData, chapterText]) => {
       glossary = glossaryData || {};
 
       const chapterInfo = Array.isArray(manifestData)
-        ? manifestData.find((ch) => ch.file === chapterFile)
+        ? manifestData.find(ch => ch.file === chapterFile)
         : null;
       if (chapterInfo && chapterTitleEl) {
         chapterTitleEl.textContent = chapterInfo.title || "Chapter";
@@ -252,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       currentPage =
-        parseInt(localStorage.getItem(`page-${bookName}-${chapterFile}`), 10) || 0;
+        parseInt(localStorage.getItem(`page-${book}-${chapterFile}`), 10) || 0;
       if (currentPage >= pages.length) currentPage = 0;
 
       prevButton.addEventListener("click", () => {
