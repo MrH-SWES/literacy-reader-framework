@@ -33,11 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
         chapterListEl.innerHTML = manifest
           .map((ch) => {
             const num = ch.displayNumber ?? ch.number;
+            const displayTitle = num
+              ? `Chapter ${num}: ${ch.title}`
+              : ch.title;
             return `
               <a href="../engine/reader.html?book=${book}&chapter=${ch.file}" class="chapter-link">
                 <div class="chapter-card">
-                  <span class="chapter-number">Chapter ${num}:</span>
-                  <span class="chapter-title">${ch.title}</span>
+                  <span class="chapter-title">${displayTitle}</span>
                 </div>
               </a>
             `;
@@ -252,10 +254,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Header Renderer ----------------------------------------------------
   function renderChapterHeader(chapterInfo, chapterTitleEl, manifestData) {
-    // Prefer explicit displayNumber over sequence number
     let chapterNum = chapterInfo.displayNumber ?? chapterInfo.number ?? 1;
 
-    // Multi-part chapters share same number
     if (/\(Part\s*\d+\)/i.test(chapterInfo.title || "")) {
       const idx = Array.isArray(manifestData)
         ? manifestData.indexOf(chapterInfo)
