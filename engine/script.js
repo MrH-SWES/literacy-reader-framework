@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const chapterTitleEl = document.getElementById("chapter-title");
   const chapterListEl = document.getElementById("chapter-list");
 
-  // --- Page vs. Library Detection -----------------------------------------
+  // --- Context ------------------------------------------------------------
   const isReaderView = !!chapterContainer;
   const urlParams = new URLSearchParams(window.location.search);
   const book = urlParams.get("book") || "suqua";
@@ -23,9 +23,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const escapeRegExp = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
   // ========================================================================
-  // ------------------------- CONTENTS PAGE LOGIC --------------------------
+  // -------------------------- CONTENTS PAGE -------------------------------
   // ========================================================================
-
   if (chapterListEl && !isReaderView) {
     fetch(MANIFEST_PATH)
       .then((r) => r.json())
@@ -53,9 +52,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ========================================================================
-  // -------------------------- READER PAGE LOGIC ---------------------------
+  // ---------------------------- READER PAGE -------------------------------
   // ========================================================================
-
   if (!chapterContainer) return;
 
   // --- Paragraph + Glossary Rendering -------------------------------------
@@ -222,7 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const page = pages[currentPage];
     let html = page.content;
 
-    // Handle embedded images: [image: file | width | align]
+    // Embedded images: [image: filename | width | align]
     html = html.replace(
       /\[image:\s*([^\|\]\s]+)(?:\s*\|\s*([^\|\]\s]+))?(?:\s*\|\s*(left|right|center))?\s*\]/gi,
       (_, file, width, align) => {
@@ -252,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     nextButton.disabled = currentPage === pages.length - 1;
   }
 
-  // --- Header Renderer ----------------------------------------------------
+  // --- Chapter Header -----------------------------------------------------
   function renderChapterHeader(chapterInfo, chapterTitleEl, manifestData) {
     let chapterNum = chapterInfo.displayNumber ?? chapterInfo.number ?? 1;
 
@@ -270,17 +268,25 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
-    const series = chapterInfo.series || "Small Steps:";
-    const bookTitle = chapterInfo.bookTitle || "The Year I Got Polio";
+    const series = chapterInfo.series || "";
+    const bookTitle = chapterInfo.bookTitle || "Untitled";
     const title = chapterInfo.title || chapterInfo.chapterTitle || "Untitled";
-    const author = chapterInfo.author || "Peg Kehret";
+    const author = chapterInfo.author || "";
+
+    const seriesHTML = series
+      ? `<p class="book-series" style="font-size:1.05rem; color:#000; font-weight:normal; margin:0 0 0.2rem 0;">${series}</p>`
+      : "";
 
     chapterTitleEl.innerHTML = `
       <div class="chapter-header">
-        <p class="book-series" style="font-size:1.05rem; color:#000; font-weight:normal; margin:0 0 0.2rem 0;">${series}</p>
+        ${seriesHTML}
         <h1 class="book-main-title" style="margin:0; font-size:2.2rem;">${bookTitle}</h1>
         <h2 class="chapter-subtitle" style="margin:0.5rem 0 0.75rem 0;">Chapter ${chapterNum}: ${title}</h2>
-        <p class="chapter-author" style="margin:0.25rem 0 1.5rem 0; font-size:0.95rem; font-style:italic; color:#555;">by ${author}</p>
+        ${
+          author
+            ? `<p class="chapter-author" style="margin:0.25rem 0 1.5rem 0; font-size:0.95rem; font-style:italic; color:#555;">by ${author}</p>`
+            : ""
+        }
       </div>
       <hr class="title-divider">
     `;
@@ -288,7 +294,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.title = `${bookTitle} — Chapter ${chapterNum}`;
   }
 
-  // --- Load Data ----------------------------------------------------------
+  // --- Load Everything ----------------------------------------------------
   Promise.all([
     fetch(GLOSSARY_PATH).then((r) => (r.ok ? r.json() : {})),
     fetch(MANIFEST_PATH).then((r) => (r.ok ? r.json() : [])),
@@ -307,7 +313,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (chapterInfo && chapterTitleEl)
         renderChapterHeader(chapterInfo, chapterTitleEl, manifestData);
 
-      // Strip redundant header lines
       chapterText = chapterText.replace(
         /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
         ""
