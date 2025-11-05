@@ -223,10 +223,11 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => []),
 
     fetch(`${CHAPTERS_PATH}${chapterFile}`)
-      .then((r) => {
-        if (!r.ok) throw new Error(`Failed to load ${chapterFile}`);
-        return r.text();
-      }),
+    .then((r) => {
+      if (!r.ok) throw new Error(`Failed to load ${chapterFile}`);
+      return r.text();
+    })
+,
   ])
     .then(([glossaryData, manifestData, chapterText]) => {
       glossary = glossaryData || {};
