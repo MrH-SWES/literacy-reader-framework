@@ -20,7 +20,7 @@
 </head>
 <body>
   <header class="chapter-header">
-    <a href="teacher.html" class="back-link">← Back to Library</a>
+    <a href="#" class="back-link" id="back-to-toc">← Back to Contents</a>
     <h1 id="chapter-title">Loading...</h1>
   </header>
   <main class="chapter-container first-page">
@@ -33,5 +33,16 @@
     <button id="next">Next</button>
   </footer>
   <script src="script.js"></script>
+  
+  <!-- Handle dynamic back button -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const bookName = urlParams.get("book");
+    const backLink = document.getElementById("back-to-toc");
+    if (backLink && bookName) {
+      backLink.href = `../books/${bookName}/index.html`;
+    }
+  </script>
+</body>
 </body>
 </html>
