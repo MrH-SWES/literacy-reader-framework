@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Reader – Literacy Reader Framework</title>
+  <title>Library – Literacy Reader Framework</title>
   <link rel="stylesheet" href="base.css" />
   <style>
     body {
@@ -11,80 +11,65 @@
       background: #fafafa;
       margin: 0;
       padding: 2rem;
-      color: #111;
     }
 
-    .back-link {
-      display: inline-block;
-      font-family: 'Trebuchet MS', sans-serif;
-      color: #0099cc;
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .book-card {
+      display: block;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
       text-decoration: none;
-      margin-bottom: 1.5rem;
+      color: #222;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .book-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .book-card img {
+      width: 100%;
+      border-radius: 10px 10px 0 0;
+      height: 280px;
+      object-fit: cover;
+    }
+
+    .book-info {
+      padding: 0.8rem 1rem 1rem;
+    }
+
+    .book-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .book-author {
+      color: #666;
       font-size: 0.9rem;
     }
-    .back-link:hover { text-decoration: underline; }
 
-    .chapter-container {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-      max-width: 640px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-
-    .chapter-content p {
-      font-family: Georgia, 'Times New Roman', serif;
-      font-size: 15px;
-      line-height: 1.75;
-      text-align: justify;
-      text-indent: 2em;
-      margin: 0 0 0.75rem 0;
-    }
-
-    .chapter-content p:first-of-type {
-      text-indent: 0;
-    }
-
-    .page-number {
+    #loading {
       text-align: center;
+      font-size: 1.1rem;
       color: #777;
-      font-family: 'Trebuchet MS', sans-serif;
-      margin: 1.5rem 0 0.75rem;
+      margin-top: 2rem;
     }
 
-    .nav-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin: 2rem auto 0;
-      max-width: 640px;
-      border-top: 1px solid #ccc;
-      padding-top: 1.25rem;
-    }
-
-    button {
-      font-family: 'Trebuchet MS', sans-serif;
-      background-color: #0099cc;
-      color: white;
-      border: none;
-      padding: 0.65rem 1.5rem;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
-    button:hover:not(:disabled) { background-color: #0077aa; }
-    button:disabled { background-color: #ccc; cursor: not-allowed; }
-
-    /* Hide when standalone */
-    body.standalone .back-link,
-    body.standalone .nav-bar { display: none; }
-
-    body.standalone { padding-top: 2rem; }
-
-    /* Contents view styles */
+    /* Contents Page Chapter List */
     .chapter-list {
       max-width: 640px;
       margin: 0 auto;
@@ -103,82 +88,59 @@
       box-shadow: 0 1px 4px rgba(0,0,0,0.08);
       transition: background 0.2s;
     }
-    .chapter-item:hover { background: #f0f8ff; }
+
+    .chapter-item:hover {
+      background: #f0f8ff;
+    }
+
   </style>
 </head>
-
 <body>
-  <a id="back-link" href="../books/index.html" class="back-link">← Back to Library</a>
-  <div id="chapter-title" class="chapter-header"></div>
-  <main class="chapter-container">
-    <div id="glossary-popup-container"></div>
-    <div class="chapter-content"></div>
-    <div class="page-number"></div>
-  </main>
-
-  <div class="nav-bar">
-    <button id="prev">Previous</button>
-    <button id="next">Next</button>
-  </div>
+  <h1>Reading Library</h1>
+  <div id="loading">Loading books...</div>
+  <div id="book-grid" class="book-grid"></div>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const book = params.get("book");
-    const chapterFile = params.get("chapter");
-    const standalone = params.get("standalone") === "true";
+    document.addEventListener("DOMContentLoaded", async () => {
+      const grid = document.getElementById("book-grid");
+      const loading = document.getElementById("loading");
 
-    if (standalone) document.body.classList.add("standalone");
+      try {
+        const booksDir = "../books";
+        const response = await fetch(booksDir);
+        if (!response.ok) throw new Error("Cannot list /books directory on GitHub Pages.");
 
-    async function loadManifest() {
-      const manifestPath = `../books/${book}/manifest.json`;
-      const res = await fetch(manifestPath);
-      return res.json();
-    }
+        loading.textContent = "Error: dynamic book discovery not supported here.";
+      } catch (err) {
+        // fallback for GitHub Pages
+        loading.remove();
 
-    async function renderContents(manifest) {
-      const header = document.getElementById("chapter-title");
-      const bookTitle = manifest[0]?.bookTitle || "Untitled Book";
-      const author = manifest[0]?.author || "";
-      header.innerHTML = `
-        <h1 style="text-align:center;">${bookTitle}</h1>
-        <p style="text-align:center;color:#666;">by ${author}</p>
-      `;
+        // Hardcoded example of loading manifest for "polio"
+        const manifest = await fetch("../books/polio/manifest.json").then(r => r.json());
 
-      const list = document.createElement("div");
-      list.className = "chapter-list";
-      manifest.forEach(ch => {
-        const num = ch.displayNumber || ch.number;
-        const a = document.createElement("a");
-        a.className = "chapter-item";
-        a.href = `teacher.html?book=${book}&chapter=${ch.file}`;
-        a.textContent = `Chapter ${num}: ${ch.title}`;
-        list.appendChild(a);
-      });
-      document.querySelector(".chapter-container").replaceWith(list);
-    }
-
-    async function renderChapter(manifest) {
-      const chapterInfo = manifest.find(c => c.file === chapterFile);
-      const titleEl = document.getElementById("chapter-title");
-
-      if (chapterInfo) {
-        const num = chapterInfo.displayNumber || chapterInfo.number;
-        titleEl.innerHTML = `
-          <div class="book-series">${chapterInfo.series || ""}</div>
-          <div class="book-main-title">${chapterInfo.bookTitle || ""}</div>
-          <div class="chapter-subtitle">Chapter ${num}: ${chapterInfo.title}</div>
-          <div class="chapter-author">by ${chapterInfo.author || ""}</div>
-          <hr class="title-divider">
+        const bookTitle = manifest[0].bookTitle || "Untitled Book";
+        const author = manifest[0].author || "";
+        const header = document.createElement("div");
+        header.innerHTML = `
+          <h1>${bookTitle}</h1>
+          <p style="text-align:center;color:#666;">by ${author}</p>
         `;
+        document.body.prepend(header);
+
+        const chapterList = document.createElement("div");
+        chapterList.className = "chapter-list";
+
+        manifest.forEach(ch => {
+          const chapterNum = ch.displayNumber || ch.number;
+          const link = document.createElement("a");
+          link.className = "chapter-item";
+          link.href = `../../engine/teacher.html?book=polio&chapter=${ch.file}`;
+          link.textContent = `Chapter ${chapterNum}: ${ch.title}`;
+          chapterList.appendChild(link);
+        });
+
+        document.body.appendChild(chapterList);
       }
-
-      const text = await fetch(`../books/${book}/chapters/${chapterFile}`).then(r => r.text());
-      document.querySelector(".chapter-content").innerHTML = text;
-    }
-
-    loadManifest().then(manifest => {
-      if (!chapterFile) renderContents(manifest);
-      else renderChapter(manifest);
     });
   </script>
 </body>
