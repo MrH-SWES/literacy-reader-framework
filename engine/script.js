@@ -204,7 +204,18 @@ document.addEventListener("DOMContentLoaded", () => {
         ? manifestData.find(ch => ch.file === chapterFile)
         : null;
       if (chapterInfo && chapterTitleEl) {
-        chapterTitleEl.textContent = chapterInfo.title || "Chapter";
+        // Create proper title structure for Polio book
+        if (chapterInfo.bookTitle) {
+          chapterTitleEl.innerHTML = `
+            <div class="book-series">Small Steps:</div>
+            <div class="book-main-title">${chapterInfo.bookTitle}</div>
+            <div class="chapter-subtitle">Chapter ${chapterInfo.number}: ${chapterInfo.title}</div>
+            <div class="chapter-author">by ${chapterInfo.author}</div>
+            <hr class="title-divider">
+          `;
+        } else {
+          chapterTitleEl.textContent = chapterInfo.title || "Chapter";
+        }
       }
 
       const pageRegex = /\[startPage=(\d+)\]([\s\S]*?)\[endPage=\1\]/g;
