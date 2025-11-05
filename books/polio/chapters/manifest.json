@@ -1,9 +1,44 @@
 [
   {
     "number": 1,
-    "title": "First Chapter Title",
-    "file": "chapter1.txt",
+    "title": "The Diagnosis (Part 1)",
+    "file": "chapter1-part1.txt",
     "bookTitle": "The Year I Got Polio",
     "author": "Peg Kehret"
+  },
+  {
+    "number": 2,
+    "title": "The Diagnosis (Part 2)",
+    "file": "chapter1-part2.txt"
+  },
+  {
+    "number": 3,
+    "title": "An Oxygen Tent and a Chocolate Milkshake",
+    "file": "chapter3.txt"
+  },
+  {
+    "number": 4,
+    "title": "Star Patient Surprises Everyone (Part 1)",
+    "file": "chapter7-part1.txt"
+  },
+  {
+    "number": 5,
+    "title": "Star Patient Surprises Everyone (Part 2)",
+    "file": "chapter7-part2.txt"
+  },
+  {
+    "number": 6,
+    "title": "The Great Accordion Concert",
+    "file": "chapter13.txt"
+  },
+  {
+    "number": 7,
+    "title": "Good-bye, Silver; Hello, Sticks",
+    "file": "chapter14.txt"
+  },
+  {
+    "number": 8,
+    "title": "Back to School",
+    "file": "chapter18.txt"
   }
 ]
