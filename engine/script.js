@@ -27,14 +27,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const norm = rawText.replace(/\r/g, "");
     const parts = norm
       .split(/(?:\n{2,})|\n(?=\s*[A-Z""'])/g)
-      .map(s =>
+      .map((s) =>
         s
           .replace(/\s+([,.!?;:])/g, "$1")
           .replace(/\s+/g, " ")
           .trim()
       )
       .filter(Boolean);
-    return parts.map(p => `<p>${renderGlossaryInline(p)}</p>`).join("\n\n");
+    return parts.map((p) => `<p>${renderGlossaryInline(p)}</p>`).join("\n\n");
   }
 
   function renderGlossaryInline(text) {
@@ -48,21 +48,25 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!data) continue;
 
       const regex = new RegExp(`\\b(${escapeRegExp(original)})\\b`, "i");
-      const parts = processed.split(/(<span class="glossary-wrap"[^>]*>[\s\S]*?<\/span>)/);
+      const parts = processed.split(
+        /(<span class="glossary-wrap"[^>]*>[\s\S]*?<\/span>)/
+      );
 
       let foundAndReplaced = false;
-      const newParts = parts.map(part => {
+      const newParts = parts.map((part) => {
         if (part.match(/<span class="glossary-wrap"/)) return part;
         if (!foundAndReplaced && regex.test(part)) {
           foundAndReplaced = true;
-          return part.replace(regex, match =>
-            `<span class="glossary-wrap" data-term="${original.toLowerCase()}">${match}</span>`
+          return part.replace(
+            regex,
+            (match) =>
+              `<span class="glossary-wrap" data-term="${original.toLowerCase()}">${match}</span>`
           );
         }
         return part;
       });
 
-      processed = newParts.join('');
+      processed = newParts.join("");
     }
 
     return processed;
@@ -70,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Glossary Popup -----------------------------------------------------
   function enhanceGlossary() {
-    const popupContainer = document.getElementById('glossary-popup-container');
+    const popupContainer = document.getElementById("glossary-popup-container");
     if (!popupContainer) return;
 
     let activePopup = null;
@@ -78,39 +82,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll(".glossary-wrap").forEach((wrap) => {
       const termText = wrap.textContent;
-      const termKey = wrap.getAttribute('data-term');
+      const termKey = wrap.getAttribute("data-term");
       if (!termKey) return;
 
       let data = glossary[termKey];
       if (!data) {
         const glossaryKey = Object.keys(glossary).find(
-          key => key.toLowerCase() === termKey.toLowerCase()
+          (key) => key.toLowerCase() === termKey.toLowerCase()
         );
         if (glossaryKey) data = glossary[glossaryKey];
       }
       if (!data) return;
 
-      const defText = typeof data === "object" ? data.definition : String(data);
-      const imgHtml = typeof data === "object" && data.image
-        ? `<img src="${data.image}" alt="${termText}" class="glossary-image" role="presentation">`
-        : "";
+      const defText =
+        typeof data === "object" ? data.definition : String(data);
+      const imgHtml =
+        typeof data === "object" && data.image
+          ? `<img src="${data.image}" alt="${termText}" class="glossary-image" role="presentation">`
+          : "";
 
-      wrap.classList.add('glossary-term');
-      wrap.setAttribute('role', 'button');
-      wrap.setAttribute('tabindex', '0');
+      wrap.classList.add("glossary-term");
+      wrap.setAttribute("role", "button");
+      wrap.setAttribute("tabindex", "0");
 
       const showPopup = (e) => {
         e.stopPropagation();
         if (activePopup) {
           activePopup.remove();
           activePopup = null;
-          if (activeTerm) activeTerm.classList.remove('active');
+          if (activeTerm) activeTerm.classList.remove("active");
         }
 
-        const popup = document.createElement('div');
-        popup.className = 'glossary-popup';
-        popup.setAttribute('role', 'dialog');
-        popup.setAttribute('aria-label', `Definition of ${termText}`);
+        const popup = document.createElement("div");
+        popup.className = "glossary-popup";
+        popup.setAttribute("role", "dialog");
+        popup.setAttribute("aria-label", `Definition of ${termText}`);
         popup.innerHTML = `
           <div class="glossary-popup-content">
             <button class="glossary-popup-close" aria-hidden="true" tabindex="-1">×</button>
@@ -122,14 +128,14 @@ document.addEventListener("DOMContentLoaded", () => {
         popupContainer.appendChild(popup);
         activePopup = popup;
         activeTerm = wrap;
-        wrap.classList.add('active');
+        wrap.classList.add("active");
 
-        const closeBtn = popup.querySelector('.glossary-popup-close');
-        closeBtn.addEventListener('click', (e) => {
+        const closeBtn = popup.querySelector(".glossary-popup-close");
+        closeBtn.addEventListener("click", (e) => {
           e.stopPropagation();
           popup.remove();
           activePopup = null;
-          wrap.classList.remove('active');
+          wrap.classList.remove("active");
           activeTerm = null;
           wrap.focus();
         });
@@ -137,32 +143,36 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => closeBtn.focus(), 50);
       };
 
-      wrap.addEventListener('click', showPopup);
-      wrap.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
+      wrap.addEventListener("click", showPopup);
+      wrap.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
           showPopup(e);
         }
       });
     });
 
-    document.addEventListener('click', (e) => {
-      if (activePopup && !e.target.closest('.glossary-popup') && !e.target.closest('.glossary-wrap')) {
+    document.addEventListener("click", (e) => {
+      if (
+        activePopup &&
+        !e.target.closest(".glossary-popup") &&
+        !e.target.closest(".glossary-wrap")
+      ) {
         activePopup.remove();
         activePopup = null;
         if (activeTerm) {
-          activeTerm.classList.remove('active');
+          activeTerm.classList.remove("active");
           activeTerm = null;
         }
       }
     });
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && activePopup) {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && activePopup) {
         activePopup.remove();
         activePopup = null;
         if (activeTerm) {
-          activeTerm.classList.remove('active');
+          activeTerm.classList.remove("active");
           activeTerm.focus();
           activeTerm = null;
         }
@@ -188,34 +198,49 @@ document.addEventListener("DOMContentLoaded", () => {
     nextButton.disabled = currentPage === pages.length - 1;
   }
 
+  // --- Header Renderer ----------------------------------------------------
+  function renderChapterHeader(chapterInfo, chapterTitleEl) {
+    const series = chapterInfo.series || "Small Steps:";
+    const bookTitle = chapterInfo.bookTitle || "The Year I Got Polio";
+    const number =
+      chapterInfo.number ?? chapterInfo.chapter ?? chapterInfo.idx ?? "";
+    const title = chapterInfo.title || chapterInfo.chapterTitle || "Untitled";
+    const author = chapterInfo.author || "Peg Kehret";
+
+    chapterTitleEl.innerHTML = `
+      <div class="chapter-header">
+        <p class="book-series">${series}</p>
+        <h1 class="book-main-title">${bookTitle}</h1>
+        <h2 class="chapter-subtitle">${
+          number ? `Chapter ${number}: ${title}` : title
+        }</h2>
+        <p class="chapter-author">by ${author}</p>
+      </div>
+      <hr class="title-divider">
+    `;
+
+    document.title = `${bookTitle} — Chapter ${number}`;
+  }
+
   // --- Load Data ----------------------------------------------------------
   Promise.all([
-    fetch(GLOSSARY_PATH).then(r => r.ok ? r.json() : {}),
-    fetch(MANIFEST_PATH).then(r => r.ok ? r.json() : []),
-    fetch(`${CHAPTERS_PATH}${chapterFile}`).then(r => {
+    fetch(GLOSSARY_PATH).then((r) => (r.ok ? r.json() : {})),
+    fetch(MANIFEST_PATH).then((r) => (r.ok ? r.json() : [])),
+    fetch(`${CHAPTERS_PATH}${chapterFile}`).then((r) => {
       if (!r.ok) throw new Error(`Failed to load ${chapterFile}`);
       return r.text();
-    })
+    }),
   ])
     .then(([glossaryData, manifestData, chapterText]) => {
       glossary = glossaryData || {};
 
       const chapterInfo = Array.isArray(manifestData)
-        ? manifestData.find(ch => ch.file === chapterFile)
+        ? manifestData.find((ch) => ch.file === chapterFile)
         : null;
       if (chapterInfo && chapterTitleEl) {
-        // Create proper title structure for Polio book
-        if (chapterInfo.bookTitle) {
-          chapterTitleEl.innerHTML = `
-            <div class="book-series">Small Steps:</div>
-            <div class="book-main-title">${chapterInfo.bookTitle}</div>
-            <div class="chapter-subtitle">Chapter ${chapterInfo.number}: ${chapterInfo.title}</div>
-            <div class="chapter-author">by ${chapterInfo.author}</div>
-            <hr class="title-divider">
-          `;
-        } else {
-          chapterTitleEl.textContent = chapterInfo.title || "Chapter";
-        }
+        renderChapterHeader(chapterInfo, chapterTitleEl);
+      } else if (chapterTitleEl) {
+        chapterTitleEl.textContent = "Chapter";
       }
 
       const pageRegex = /\[startPage=(\d+)\]([\s\S]*?)\[endPage=\1\]/g;
