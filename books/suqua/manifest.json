@@ -1,5 +1,10 @@
 [
   {
+    "bookTitle": "Daughter of Suqua",
+    "author": "Daniel Krammer"
+  }
+
+  {
     "number": 1,
     "title": "Suqua",
     "file": "chapter1.txt"
