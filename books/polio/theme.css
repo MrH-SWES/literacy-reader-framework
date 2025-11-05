@@ -11,85 +11,89 @@ body {
   padding: 2.5rem 2rem;
 }
 
-/* Main book title - Two line format */
-.chapter-container h1 {
-  font-family: 'Trebuchet MS', 'Arial', sans-serif;
+/* Chapter header structure */
+#chapter-title {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* "Small Steps:" */
+.book-series {
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 1.15rem;
   font-weight: normal;
   color: #000;
-  text-align: center;
   margin: 0 0 0.25rem 0;
   line-height: 1.3;
 }
 
-/* Large blue title - "The Year I Got Polio" */
-.chapter-container h1 + * {
+/* "The Year I Got Polio" - BIG BLUE */
+.book-main-title {
   font-family: 'Trebuchet MS', 'Arial', sans-serif;
-  font-size: 2.5rem;
+  font-size: 2.75rem;
   font-weight: bold;
   color: #0099cc;
-  text-align: center;
-  margin: 0 0 1.5rem 0;
-  line-height: 1.15;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.1;
 }
 
-/* Chapter subtitle - smaller, regular */
-h2 {
+/* "Chapter 1: The Diagnosis (Part 2)" */
+.chapter-subtitle {
   font-family: 'Trebuchet MS', 'Arial', sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   font-weight: normal;
   color: #0099cc;
-  text-align: center;
   margin: 0 0 0.5rem 0;
   line-height: 1.3;
 }
 
-/* Author byline - centered, italic, smaller */
-h2 + p,
-.author {
+/* "by Peg Kehret" */
+.chapter-author {
   font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 1rem;
   font-style: italic;
-  color: #333;
-  text-align: center;
-  margin: 0 0 2rem 0;
-  text-indent: 0 !important;
-  font-weight: normal;
+  color: #555;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Blue divider line */
+.title-divider {
+  border: none;
+  border-top: 3px solid #0099cc;
+  margin: 1.5rem auto 2rem auto;
+  width: 100%;
 }
 
 /* Body paragraphs - justified, indented */
 p {
   text-indent: 2em;
-  margin: 0;
+  margin: 0 0 0.5rem 0;
   text-align: justify;
   line-height: 1.75;
   hyphens: auto;
 }
 
-/* First paragraph after heading - no indent */
-h1 + p,
-h2 + p + p,
-.intro + p {
+/* First paragraph - no indent */
+.chapter-content > p:first-of-type {
   text-indent: 0;
 }
 
-/* Introduction boxes - gray italic */
-.intro {
-  background-color: transparent;
-  padding: 0;
-  margin: 1.5rem 0;
-  font-style: italic;
-  color: #333;
-  text-indent: 2em !important;
-  text-align: justify;
-  line-height: 1.75;
+/* Headings within content */
+h1, h2, h3 {
+  font-family: 'Trebuchet MS', 'Arial', sans-serif;
+  color: #0099cc;
+  font-weight: normal;
+  margin: 1.5rem 0 0.75rem 0;
 }
 
-/* Page numbers - bottom center */
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1.1rem; }
+
+/* Page numbers */
 .page-number {
   font-family: 'Trebuchet MS', 'Arial', sans-serif;
   font-size: 0.9rem;
-  font-weight: normal;
   color: #666;
   text-align: center;
   margin: 2rem 0 1rem 0;
@@ -97,7 +101,7 @@ h2 + p + p,
 
 /* Header */
 .chapter-header {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0;
 }
 
 .back-link {
@@ -105,7 +109,7 @@ h2 + p + p,
   font-family: 'Trebuchet MS', 'Arial', sans-serif;
   color: #0099cc;
   text-decoration: none;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
   font-size: 0.9rem;
 }
 
@@ -145,14 +149,14 @@ button:disabled {
   cursor: not-allowed;
 }
 
-/* Glossary terms - BOLD blue with underline */
+/* Glossary terms - BOLD BLUE UNDERLINED */
 .glossary-term {
   color: #0099cc;
   font-weight: 700;
   cursor: pointer;
   text-decoration: underline;
-  text-decoration-style: solid;
   text-decoration-color: #0099cc;
+  text-decoration-thickness: 2px;
   text-underline-offset: 2px;
   transition: background-color 0.2s;
 }
@@ -214,6 +218,14 @@ button:disabled {
     padding: 1.5rem 1rem;
     font-size: 13.5px;
   }
+
+  .book-main-title {
+    font-size: 2rem;
+  }
+
+  .chapter-subtitle {
+    font-size: 1.15rem;
+  }
 }
 
 /* Print */
@@ -225,22 +237,8 @@ button:disabled {
   }
 
   .glossary-term {
-    color: inherit;
+    color: #0099cc;
     font-weight: 700;
     text-decoration: none;
   }
 }
-```
-
----
-
-## Also Need to Fix Chapter Title Structure
-
-The chapter files need their titles formatted correctly. The PDF shows:
-```
-Small Steps:
-The Year I Got Polio
-
-Chapter 1: The Diagnosis (Part 2)
-
-by Peg Kehret
