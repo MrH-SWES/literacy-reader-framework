@@ -38,8 +38,13 @@ document.addEventListener("DOMContentLoaded", () => {
         return r.json();
       })
       .then((manifest) => {
-        if (!Array.isArray(manifest)) throw new Error("Invalid manifest format");
-        chapterListEl.innerHTML = manifest
+        const chapters = manifest.chapters || manifest;
+        if (!Array.isArray(chapters))
+          throw new Error("Invalid manifest format (expected array or .chapters array)");
+
+        if (manifest.title) document.title = manifest.title;
+
+        chapterListEl.innerHTML = chapters
           .map((ch) => {
             const num = ch.displayNumber ?? ch.number;
             const numberLabel = num ? `Chapter ${num}: ` : "";
@@ -230,7 +235,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const page = pages[currentPage];
     let html = page.content;
 
-    // Embedded images
     html = html.replace(
       /\[image:\s*([^\|\]\s]+)(?:\s*\|\s*([^\|\]\s]+))?(?:\s*\|\s*(left|right|center))?\s*\]/gi,
       (_, file, width, align) => {
@@ -316,12 +320,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(([glossaryData, manifestData, chapterText]) => {
       glossary = glossaryData || {};
 
-      const chapterInfo = Array.isArray(manifestData)
-        ? manifestData.find((ch) => ch.file === chapterFile)
+      const chapters = manifestData.chapters || manifestData;
+      const chapterInfo = Array.isArray(chapters)
+        ? chapters.find((ch) => ch.file === chapterFile)
         : null;
 
       if (chapterInfo && chapterTitleEl)
-        renderChapterHeader(chapterInfo, chapterTitleEl, manifestData);
+        renderChapterHeader(chapterInfo, chapterTitleEl, chapters);
 
       chapterText = chapterText.replace(
         /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
