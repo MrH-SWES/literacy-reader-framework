@@ -419,8 +419,7 @@
   "kerosene lamp": {
     "definition": "a lamp that burns kerosene oil for light",
     "image": "assets/kerosene-lamp.jpg"
-  }
-  {
+  },
   "receding": {
     "definition": "moving back or away"
   },
@@ -525,7 +524,7 @@
   },
   "approve": {
     "definition": "think something is right or good"
-  }
+  },
     "respectful": {
     "definition": "showing polite honor or regard for someone"
   },
