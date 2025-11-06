@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ---------------------------- CONTENTS PAGE -----------------------------
   // ========================================================================
   if (chapterListEl && !isReaderView) {
-    fetch(MANIFEST_PATH)
+    fetch(`${MANIFEST_PATH}?v=${Date.now()}`)
       .then((r) => {
         if (!r.ok) throw new Error(`Manifest not found at ${MANIFEST_PATH}`);
         return r.json();
@@ -71,7 +71,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ========================================================================
   if (!chapterContainer) return;
 
-  // --- Paragraph + Glossary Rendering -------------------------------------
   function makeParagraphHTML(rawText) {
     const norm = rawText.replace(/\r/g, "");
     const parts = norm
@@ -121,7 +120,6 @@ document.addEventListener("DOMContentLoaded", () => {
     return processed;
   }
 
-  // --- Glossary Popup -----------------------------------------------------
   function enhanceGlossary() {
     const popupContainer = document.getElementById("glossary-popup-container");
     if (!popupContainer) return;
@@ -229,7 +227,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- Page Rendering -----------------------------------------------------
   function renderPage() {
     if (!pages.length) return;
     const page = pages[currentPage];
@@ -264,7 +261,6 @@ document.addEventListener("DOMContentLoaded", () => {
     nextButton.disabled = currentPage === pages.length - 1;
   }
 
-  // --- Chapter Header -----------------------------------------------------
   function renderChapterHeader(chapterInfo, chapterTitleEl, manifestData) {
     let chapterNum = chapterInfo.displayNumber ?? chapterInfo.number ?? 1;
 
@@ -285,7 +281,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const series = chapterInfo.series || "";
     const bookTitle = manifestData.title || chapterInfo.bookTitle || "Untitled";
     const title = chapterInfo.title || chapterInfo.chapterTitle || "Untitled";
-    const author = chapterInfo.author || "";
+    const author = manifestData.author || chapterInfo.author || "";
 
     const seriesHTML = series
       ? `<p class="book-series" style="font-size:1.05rem; color:#000; font-weight:normal; margin:0 0 0.2rem 0;">${series}</p>`
@@ -308,10 +304,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.title = `${bookTitle} — Chapter ${chapterNum}`;
   }
 
-  // --- Load Data ----------------------------------------------------------
   Promise.all([
     fetch(GLOSSARY_PATH).then((r) => (r.ok ? r.json() : {})),
-    fetch(MANIFEST_PATH).then((r) => (r.ok ? r.json() : [])),
+    fetch(`${MANIFEST_PATH}?v=${Date.now()}`).then((r) => (r.ok ? r.json() : [])),
     fetch(`${CHAPTERS_PATH}${chapterFile}`).then((r) => {
       if (!r.ok) throw new Error(`Failed to load ${chapterFile}`);
       return r.text();
@@ -327,7 +322,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (chapterInfo && chapterTitleEl)
         renderChapterHeader(chapterInfo, chapterTitleEl, manifestData);
-
 
       chapterText = chapterText.replace(
         /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
