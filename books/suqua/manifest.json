@@ -1,7 +1,6 @@
 {
   "title": "Daughter of Suqua",
   "author": "Diane Johnston Hamm",
-  "chapters": [
     { "number": 1, "title": "Suqua", "file": "chapter1.txt" },
     { "number": 2, "title": "Little Grandma", "file": "chapter2.txt" },
     { "number": 3, "title": "Fishing Camp", "file": "chapter3.txt" },
@@ -9,5 +8,4 @@
     { "number": 5, "title": "Mr. Simpson Says", "file": "chapter5.txt" },
     { "number": 6, "title": "Back to School", "file": "chapter6.txt" },
     { "number": 7, "title": "Indian Court", "file": "chapter7.txt" }
-  ]
-}
+  }
