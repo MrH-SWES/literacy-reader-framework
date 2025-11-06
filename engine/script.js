@@ -283,7 +283,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const series = chapterInfo.series || "";
-    const bookTitle = chapterInfo.bookTitle || "Untitled";
+    const bookTitle = manifestData.title || chapterInfo.bookTitle || "Untitled";
     const title = chapterInfo.title || chapterInfo.chapterTitle || "Untitled";
     const author = chapterInfo.author || "";
 
