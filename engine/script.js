@@ -326,7 +326,8 @@ document.addEventListener("DOMContentLoaded", () => {
         : null;
 
       if (chapterInfo && chapterTitleEl)
-        renderChapterHeader(chapterInfo, chapterTitleEl, chapters);
+        renderChapterHeader(chapterInfo, chapterTitleEl, manifestData);
+
 
       chapterText = chapterText.replace(
         /Small Steps:[\s\S]*?by Peg Kehret\s*/i,
