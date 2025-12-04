@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const booksDir = "/literacy-reader-framework/books";
     
     // Manually list known books
-    const books = ["suqua", "polio", "jane_goodall"]; // Add "polio" later
+    const books = ["suqua", "polio", "jane_goodall"];
     
     await Promise.all(
       books.map(async (book) => {
@@ -19,16 +19,18 @@ document.addEventListener("DOMContentLoaded", async () => {
           const res = await fetch(manifestUrl);
           manifest = await res.json();
         } catch {
-          manifest = [];
+          manifest = {};
         }
         
-        const bookTitle = manifest.length > 0 && manifest[0].bookTitle
-            ? manifest[0].bookTitle
-            : book.charAt(0).toUpperCase() + book.slice(1);
+        // Get title from manifest.title OR from first chapter's bookTitle
+        const bookTitle = manifest.title 
+            || (manifest.chapters && manifest.chapters[0]?.bookTitle)
+            || book.charAt(0).toUpperCase() + book.slice(1);
             
-        const author = manifest.length > 0 && manifest[0].author
-            ? manifest[0].author
-            : "Unknown Author";
+        // Get author from manifest.author OR from first chapter's author
+        const author = manifest.author 
+            || (manifest.chapters && manifest.chapters[0]?.author)
+            || "Unknown Author";
         
         const card = document.createElement("a");
         card.href = `/literacy-reader-framework/books/${book}/index.html`;
