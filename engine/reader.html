@@ -156,7 +156,7 @@
     }
 
     async function loadManifest() {
-      const manifestPath = `../books/${book}/manifest.json`;
+      const manifestPath = `../books/${book}/chapters/manifest.json`;
       const res = await fetchWithFallback(manifestPath);
       return res.json();
     }
