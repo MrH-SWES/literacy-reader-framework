@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jane Goodall</title>
+  <link rel="stylesheet" href="../../engine/base.css">
+  <style>
+    body {
+      font-family: 'Lexend', sans-serif;
+      background: #fafafa;
+      padding: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .chapter-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .chapter-link {
+      text-decoration: none;
+    }
+    .chapter-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .chapter-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    .chapter-title {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+  <h1>Jane Goodall</h1>
+  <div id="chapter-list" class="chapter-list"></div>
+  <script src="../../engine/reader.js"></script>
+</body>
+</html>
