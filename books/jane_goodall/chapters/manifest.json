@@ -1,1 +1,12 @@
-
+{
+  "title": "Jane Goodall",
+  "author": "",
+  "chapters": [
+    {
+      "number": 14,
+      "displayNumber": 14,
+      "title": "Jane Goodall",
+      "file": "chapter14.txt"
+    }
+  ]
+}
