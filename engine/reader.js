@@ -73,7 +73,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function makeParagraphHTML(rawText) {
     const norm = rawText.replace(/\r/g, "");
-    const parts = norm
+    
+    // Extract geology image placeholders
+    const placeholders = [];
+    let textWithMarkers = norm.replace(/GEOLOGY_IMG_PLACEHOLDER_[^_]+_END/g, (match) => {
+      placeholders.push(match);
+      return `%%%PLACEHOLDER${placeholders.length - 1}%%%`;
+    });
+    
+    const parts = textWithMarkers
       .split(/(?:\n{2,})|\n(?=\s*[A-Z""'])/g)
       .map((s) =>
         s
@@ -82,7 +90,15 @@ document.addEventListener("DOMContentLoaded", () => {
           .trim()
       )
       .filter(Boolean);
-    return parts.map((p) => `<p>${renderGlossaryInline(p)}</p>`).join("\n\n");
+    
+    let result = parts.map((p) => `<p>${renderGlossaryInline(p)}</p>`).join("\n\n");
+    
+    // Restore geology image placeholders
+    placeholders.forEach((placeholder, idx) => {
+      result = result.replace(`%%%PLACEHOLDER${idx}%%%`, placeholder);
+    });
+    
+    return result;
   }
 
   function renderGlossaryInline(text) {
@@ -248,15 +264,16 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
-    // Handle geology book absolute paths
+    chapterContainer.innerHTML = makeParagraphHTML(html);
+    
+    // Handle geology book absolute paths AFTER paragraph HTML is created
     if (book === "geology") {
-      html = html.replace(
+      chapterContainer.innerHTML = chapterContainer.innerHTML.replace(
         /GEOLOGY_IMG_PLACEHOLDER_([^_]+)_END/g,
         (_, file) => `<img src="/literacy-reader-framework/books/geology/assets/${file}" class="chapter-illustration" style="display:block;margin:1.5rem auto;">`
       );
     }
-
-    chapterContainer.innerHTML = makeParagraphHTML(html);
+    
     enhanceGlossary();
 
     const wrapper = document.querySelector(".chapter-container");
