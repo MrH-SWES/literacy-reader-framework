@@ -1,22 +1,13 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  const list = document.getElementById("chapter-list");
-  try {
-    // Automatically detect book name from URL path
-    const pathParts = window.location.pathname.split('/');
-    const bookIndex = pathParts.indexOf('books') + 1;
-    const bookName = pathParts[bookIndex];
-    
-    const response = await fetch("chapters/manifest.json");
-    const manifest = await response.json();
-    manifest.forEach(ch => {
-      const li = document.createElement("li");
-      const link = document.createElement("a");
-      link.href = `../../engine/chapter.html?book=${bookName}&chapter=${ch.file}`;
-      link.textContent = ch.title || ch.file.replace(".txt", "");
-      li.appendChild(link);
-      list.appendChild(li);
-    });
-  } catch (err) {
-    list.innerHTML = `<li>Error loading chapters: ${err.message}</li>`;
-  }
+const chapters = [
+  { title: "Earth's Changing Surface", file: "chapters/chapter1.html" }
+];
+
+const list = document.getElementById("chapter-list");
+chapters.forEach(ch => {
+  const li = document.createElement("li");
+  const a = document.createElement("a");
+  a.href = ch.file;
+  a.textContent = ch.title;
+  li.appendChild(a);
+  list.appendChild(li);
 });
