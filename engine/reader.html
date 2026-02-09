@@ -112,7 +112,6 @@
     .chapter-author { text-align: center; color: #666; font-style: italic; margin-bottom: 1rem; }
     hr.title-divider { margin: 1rem auto 2rem; width: 60%; }
 
-    /* Hide back link on contents page for student view */
     body.contents-only .back-link { display: none; }
   </style>
 </head>
@@ -137,10 +136,13 @@
     const book = params.get("book");
     const chapterFile = params.get("chapter");
     const standalone = params.get("standalone") === "true";
-    const student = params.get("student") === "true"; // hide back link on contents
+    const student = params.get("student") === "true";
 
     if (standalone) document.body.classList.add("standalone");
     if (!chapterFile && student) document.body.classList.add("contents-only");
+
+    let currentPage = 0;
+    let pages = [];
 
     async function fetchWithFallback(path) {
       try {
@@ -159,7 +161,6 @@
       const manifestPath = `../books/${book}/chapters/manifest.json`;
       const res = await fetchWithFallback(manifestPath);
       const data = await res.json();
-      // Handle both array format and object with chapters property
       return data.chapters || data;
     }
 
@@ -206,12 +207,65 @@
       const res = await fetchWithFallback(chapterPath);
       let text = await res.text();
 
-      // Inject images using [image: filename.jpg]
-      text = text.replace(/\[image:\s*([^\]]+)\]/g, (_, img) =>
-        `<img src="/literacy-reader-framework/books/${book}/assets/${img.trim()}" class="chapter-image" alt="">`
-      );
+      const pageRegex = /\[startPage=(\d+)\]([\s\S]*?)\[endPage=\1\]/g;
+      let match;
+      pages = [];
+      
+      while ((match = pageRegex.exec(text)) !== null) {
+        const pageNum = match[1];
+        let content = match[2].trim();
+        
+        content = content.replace(/\[image:\s*([^\|\]]+)(?:\s*\|\s*([^\|\]]+))?(?:\s*\|\s*([^\]]+))?\]/g, 
+          (_, img, width, align) => {
+            const w = width ? width.trim() : '80%';
+            const style = `max-width: ${w}; display: block; margin: 1.5rem auto;`;
+            return `<img src="/literacy-reader-framework/books/${book}/assets/${img.trim()}" style="${style}" class="chapter-image" alt="">`;
+          }
+        );
+        
+        content = content.replace(/\[cite:\s*([^\]]+)\]/g, '');
+        
+        content = content.split('\n\n').map(p => p.trim()).filter(p => p).map(p => `<p>${p}</p>`).join('');
+        
+        pages.push({ number: pageNum, content });
+      }
 
-      document.querySelector(".chapter-content").innerHTML = text;
+      if (pages.length > 0) {
+        showPage(0);
+        updateNavButtons();
+      } else {
+        document.querySelector(".chapter-content").innerHTML = text;
+      }
+    }
+
+    function showPage(index) {
+      if (index < 0 || index >= pages.length) return;
+      currentPage = index;
+      const page = pages[currentPage];
+      document.querySelector(".chapter-content").innerHTML = page.content;
+      document.querySelector(".page-number").textContent = `Page ${page.number}`;
+    }
+
+    function updateNavButtons() {
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+      
+      prevBtn.disabled = currentPage === 0;
+      nextBtn.disabled = currentPage === pages.length - 1;
+      
+      prevBtn.onclick = () => {
+        if (currentPage > 0) {
+          showPage(currentPage - 1);
+          updateNavButtons();
+        }
+      };
+      
+      nextBtn.onclick = () => {
+        if (currentPage < pages.length - 1) {
+          showPage(currentPage + 1);
+          updateNavButtons();
+        }
+      };
     }
 
     loadManifest().then(manifest => {
