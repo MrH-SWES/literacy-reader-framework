@@ -1,0 +1,55 @@
+[startPage=22]
+Italian writer Francesco Petrarch penned the following eyewitness account in the Middle Ages. Can you guess what he was writing about?
+
+"The floor trembled under my feet; when the books crashed into each other and fell down I was frightened and hurried to leave the room. Outside I saw the servants and many other people running anxiously to and fro. All faces were pale."
+
+If you said an earthquake, you're correct! People in northern Italy had good reason to be pale and frightened on a winter's day in 1348 CE. On that day, a large earthquake struck. Thousands of people lost their lives.
+
+Earthquakes are violent natural disasters that strike without warning. Suddenly, the ground begins to shake. Furniture topples, objects tumble from shelves, and buildings may even collapse. In 1348 CE, people had no idea what caused earthquakes. Today we know that earthquakes are the result of powerful natural forces at work in Earth's crust and mantle.
+[endPage=22]
+
+[startPage=23]
+As you read in Chapter 2, scientists developed the theory of plate tectonics in the 1960s. The theory explains how Earth's surface and interior change over very long periods of time. Some plates are pulling apart at their boundaries, other plates are colliding, and still others are sliding past each other. A lot happens at plate boundaries, including most earthquakes. In fact, one of the easiest ways to locate plate boundaries is to determine where earthquakes are occurring!
+[endPage=23]
+
+[startPage=24]
+Try a little experiment. Extend your arms out in front of you parallel to the floor and put your hands together. Keep your palms and fingers flat against each other. Now start pressing your hands together. Gradually increase the pressure. When you can't press any harder, let your right hand quickly slide forward. That sudden slipping is what happens at a fault.
+
+A fault is a fracture, or crack, in Earth's crust. Most faults occur along the boundaries of tectonic plates. As plates move, huge rough blocks of rock along either side of a fault get stuck against each other. Beneath the plates, however, material in the mantle keeps moving. This material exerts more and more pressure on the plates to also keep moving. Pressure builds along the stuck edges of the fault. Think of your hands as these edges, pressing harder and harder together. The pressure builds until the stuck blocks of rock suddenly break and slip past one another. As they do, a tremendous burst of energy is released. How much energy? Well, all the energy that accumulated in the rocks during the time they were stuck and couldn't move.
+
+The Pacific Plate is Earth's largest tectonic plate. It lies beneath the Pacific Ocean. Imagine how much energy it takes to move that gigantic rocky plate plus all the water on top of it. Then imagine all that energy being released at a fault in just a moment. Such a colossal burst of energy travels outward from the fault in all directions as seismic waves. Seismic waves make the ground heave and shake. This violent shaking is what we call an earthquake.
+[endPage=24]
+
+[startPage=25]
+[endPage=25]
+
+[startPage=26]
+All earthquakes begin with huge blocks of rock moving along faults. The place in Earth's crust where this happens is an earthquake's focus. Think of it as the earthquake's heart, the source of seismic waves. The focus may be deep in the crust or close to the surface.
+
+The epicenter is the point on Earth's surface directly above an earthquake's focus. Some kinds of seismic waves produced by earthquakes travel deep into Earth's interior. Surface waves, however, are seismic waves that are first noticeable at the epicenter. During an earthquake, surface waves are what make the ground shake, heave, sway, and lurch. They are the cause of most earthquake damage.
+
+In Chapter 2, you read about seismographs, which scientists use to record the shaking of Earth's surface caused by seismic waves. The time it takes for seismic waves to reach a seismograph is important in determining where the earthquake occurred. The longer that seismic waves take to reach a seismograph, the farther away the earthquake is from the seismograph.
+[endPage=26]
+
+[startPage=27]
+[endPage=27]
+
+[startPage=28]
+Scientists also use seismographs to measure an earthquake's strength, or magnitude. During a small earthquake, Earth's surface may shake only a little. The seismogram shows these relatively low-energy seismic waves as little wiggles. During a big earthquake, Earth's surface shakes a lot harder. The seismogram shows these high-energy waves as big zigzags.
+
+The Richter scale is another way scientists measure an earthquake's magnitude. The Richter scale assigns a number to an earthquake based on the largest seismic wave recorded for that earthquake. The higher the Richter scale number, the stronger the earthquake. For example, a magnitude 5.0 earthquake on the Richter scale causes 10 times as much ground shaking as a magnitude 4.0 earthquake. A magnitude 6.0 earthquake causes 10 times more shaking than a 5.0, and so on.
+[endPage=28]
+
+[startPage=29]
+The Modified Mercalli Intensity Scale also uses numbers to measure earthquake strength. The numbers are based on survivors' descriptions and the amount of earthquake damage. The higher the number, the stronger the earthquake. The Mercalli scale is less scientific than the Richter scale, as few people describe events in the same way.
+
+Pressure along faults can build up for years, even centuries. When blocks of rock along a fault finally move, the resulting earthquake happens very quickly. Most earthquakes last just a few seconds. Still, the trouble may not be over after the ground stops shaking. Large earthquakes are often followed by aftershocks. Aftershocks are like mini-earthquakes. They are usually smaller and weaker than the main earthquake event. Aftershocks happen as blocks of rock along the newly slipped fault settle into place.
+[endPage=29]
+
+[startPage=30]
+Remember that most earthquakes occur along the boundaries of tectonic plates. Several plate boundaries are in the ocean, so many earthquakes occur in the oceanic crust that forms the seafloor. This is especially true around the Pacific Ocean. The Pacific has many deep ocean trenches along the edges of its ocean basin. Ocean trenches form where one tectonic plate is sliding, or subducting, beneath another plate. Earthquakes are very common in the continental crust along ocean trenches.
+
+Earthquakes that occur in the crust forming the ocean bottom can cause the seafloor to shift. This shift can cause seawater, from the ocean bottom to its surface, to suddenly start to move. The result is a gigantic wave called a tsunami.
+
+Tsunamis travel fast—as much as 500 miles per hour. Out in deep water in the middle of the ocean, you'd hardly notice this great pulse of water passing by. All that water piles up as the tsunami approaches a coastline. It becomes a towering wall of water that may be as tall as a three- or four-story building. The tsunami crashes onto the shore with incredible force. It surges far inland. Then it goes roaring and churning back out to sea. Tsunamis can cause terrible destruction.
+[endPage=30]
