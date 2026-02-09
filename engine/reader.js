@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Handle geology book absolute paths
     if (book === "geology") {
       html = html.replace(
-        /\[IMG:([^\]]+)\]/g,
+        /GEOLOGY_IMG_PLACEHOLDER_([^_]+)_END/g,
         (_, file) => `<img src="/literacy-reader-framework/books/geology/assets/${file}" class="chapter-illustration" style="display:block;margin:1.5rem auto;">`
       );
     }
@@ -339,7 +339,17 @@ document.addEventListener("DOMContentLoaded", () => {
       const pageRegex = /\[startPage=(\d+)\]([\s\S]*?)\[endPage=\1\]/g;
       let m;
       while ((m = pageRegex.exec(chapterText)) !== null) {
-        pages.push({ number: parseInt(m[1], 10), content: m[2].trim() });
+        let content = m[2].trim();
+        
+        // Handle geology book images
+        if (book === "geology") {
+          content = content.replace(
+            /\[IMG:([^\]]+)\]/g,
+            (_, file) => `GEOLOGY_IMG_PLACEHOLDER_${file}_END`
+          );
+        }
+        
+        pages.push({ number: parseInt(m[1], 10), content });
       }
 
       if (!pages.length) {
