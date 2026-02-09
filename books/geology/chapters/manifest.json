@@ -1,11 +1,27 @@
 {
-  "title": "Geology: The Changing Earth",
-  "author": "Core Knowledge Foundation",
+  "title": "Geology",
+  "author": "Amplify Science Unit 5",
   "chapters": [
-    { 
-      "number": 1, 
-      "title": "Earth's Changing Surface", 
-      "file": "chapter1.txt" 
+    {
+      "number": 1,
+      "title": "Earth's Changing Surface",
+      "file": "chapter1.txt",
+      "bookTitle": "Geology",
+      "author": "Amplify Science Unit 5"
+    },
+    {
+      "number": 2,
+      "title": "Earth's Layers and Moving Plates",
+      "file": "chapter2.txt",
+      "bookTitle": "Geology",
+      "author": "Amplify Science Unit 5"
+    },
+    {
+      "number": 3,
+      "title": "Earth's Shakes and Quakes",
+      "file": "chapter3.txt",
+      "bookTitle": "Geology",
+      "author": "Amplify Science Unit 5"
     }
   ]
 }
