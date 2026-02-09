@@ -1,63 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Geology – Reading Portal</title>
-  <link rel="stylesheet" href="../../engine/base.css" />
-  <style>
-    body {
-      font-family: 'Lexend', sans-serif;
-      background: #fafafa;
-      color: #222;
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-    .chapter-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    .chapter-list li {
-      margin: 0.8rem 0;
-      padding: 0.6rem 0.8rem;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-      transition: background 0.2s;
-    }
-    .chapter-list li:hover {
-      background: #f1f7ff;
-    }
-    a {
-      text-decoration: none;
-      color: #1a3b7a;
-      font-weight: 500;
-      display: block;
-    }
-    .book-meta {
-      text-align: center;
-      color: #555;
-      margin-bottom: 1.5rem;
-    }
-    .back-link {
-      display: inline-block;
-      margin-bottom: 1rem;
-      color: #444;
-      text-decoration: none;
-    }
-  </style>
-</head>
-<body>
-  <a href="../../engine/teacher.html" class="back-link">← Back to Library</a>
-  <h1>Geology</h1>
-  <div class="book-meta">Amplify Science Unit 5</div>
-  <ul id="chapter-list" class="chapter-list"></ul>
-  <script src="toc.js"></script>
-</body>
-</html>
+<script>
+  const bookName = "geology";
+  fetch(`chapters/manifest.json`)
+    .then(r => r.json())
+    .then(data => {
+      const manifest = data.chapters || data;
+      const list = document.getElementById("chapter-list");
+      manifest.forEach(ch => {
+        const li = document.createElement("li");
+        const a = document.createElement("a");
+        a.href = `../../engine/reader.html?book=${bookName}&chapter=${ch.file}`;
+        a.textContent = `Chapter ${ch.number}: ${ch.title}`;
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+    });
+</script>
