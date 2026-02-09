@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Geology – Reading Portal</title>
   <link rel="stylesheet" href="../../engine/base.css" />
+  <link rel="stylesheet" href="theme.css" />
   <style>
     body {
       font-family: 'Lexend', sans-serif;
@@ -14,6 +15,15 @@
       margin: 0 auto;
       padding: 2rem;
     }
+    
+    .book-cover {
+      display: block;
+      margin: 0 auto 2rem;
+      max-width: 300px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
     h1 {
       text-align: center;
       margin-bottom: 1rem;
@@ -55,26 +65,11 @@
 </head>
 <body>
   <a href="../../engine/teacher.html" class="back-link">← Back to Library</a>
+  <img src="assets/geology-cover.jpg" alt="Geology cover" class="book-cover">
   <h1>Geology</h1>
   <div class="book-meta">Amplify Science Unit 5</div>
   <ul id="chapter-list" class="chapter-list"></ul>
   
-  <script>
-    const bookName = "geology";
-    fetch(`chapters/manifest.json`)
-      .then(r => r.json())
-      .then(data => {
-        const manifest = data.chapters || data;
-        const list = document.getElementById("chapter-list");
-        manifest.forEach(ch => {
-          const li = document.createElement("li");
-          const a = document.createElement("a");
-          a.href = `../../engine/chapter.html?book=${bookName}&chapter=${ch.file}`;
-          a.textContent = `Chapter ${ch.number}: ${ch.title}`;
-          li.appendChild(a);
-          list.appendChild(li);
-        });
-      });
-  </script>
+  <script src="toc.js"></script>
 </body>
 </html>
