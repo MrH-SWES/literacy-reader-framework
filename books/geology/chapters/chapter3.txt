@@ -5,10 +5,12 @@ Italian writer Francesco Petrarch penned the following eyewitness account in the
 
 If you said an earthquake, you're correct! People in northern Italy had good reason to be pale and frightened on a winter's day in 1348 CE. On that day, a large earthquake struck. Thousands of people lost their lives.
 
-Earthquakes are violent natural disasters that strike without warning. Suddenly, the ground begins to shake. Furniture topples, objects tumble from shelves, and buildings may even collapse. In 1348 CE, people had no idea what caused earthquakes. Today we know that earthquakes are the result of powerful natural forces at work in Earth's crust and mantle.
+Earthquakes are violent natural disasters that strike without warning. Suddenly, the ground begins to shake. Furniture topples,
 [endPage=22]
 
 [startPage=23]
+objects tumble from shelves, and buildings may even collapse. In 1348 CE, people had no idea what caused earthquakes. Today we know that earthquakes are the result of powerful natural forces at work in Earth's crust and mantle.
+
 As you read in Chapter 2, scientists developed the theory of plate tectonics in the 1960s. The theory explains how Earth's surface and interior change over very long periods of time. Some plates are pulling apart at their boundaries, other plates are colliding, and still others are sliding past each other. A lot happens at plate boundaries, including most earthquakes. In fact, one of the easiest ways to locate plate boundaries is to determine where earthquakes are occurring!
 [endPage=23]
 
@@ -21,6 +23,7 @@ The Pacific Plate is Earth's largest tectonic plate. It lies beneath the Pacific
 [endPage=24]
 
 [startPage=25]
+In the United States, one of the most famous faults is the San Andreas Fault in California. It lies along the boundary between two tectonic plates that are slowly moving past each other. The movement, however, is far from steady. For years at a time, blocks of rock bordering the San Andreas Fault stay stuck. Pressure slowly builds. Then—wham!—they slip and trigger an earthquake. The 1906 San Francisco earthquake was one of the worst in American history. The sudden slip that triggered it was huge. It caused rocks on either side of the fault to move more than 20 feet in just seconds!
 [endPage=25]
 
 [startPage=26]
@@ -32,6 +35,9 @@ In Chapter 2, you read about seismographs, which scientists use to record the sh
 [endPage=26]
 
 [startPage=27]
+A modern seismograph, also called a seismometer, records the shaking of Earth's surface caused by seismic waves. A seismogram is the record a seismograph makes. A seismogram shows seismic waves as jagged up-and-down lines. Scientists compare multiple seismograms in order to pinpoint an earthquake's epicenter.
+
+Zhang Heng, a Chinese scientist, invented the first-known seismograph around 132 CE. It didn't look anything like a modern seismograph. It was shaped like a large vase. The vase had eight dragons around the outside, each looking downward and holding a ball loosely in its mouth. Below the eight dragons were open-mouthed frogs. When an earthquake struck, the balls fell into the frogs' mouths below. Depending on which balls fell, it was possible to estimate the distance and direction to the earthquake's source.
 [endPage=27]
 
 [startPage=28]
