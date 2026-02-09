@@ -1,10 +1,10 @@
 [startPage=12]
 Alfred Wegener's continental drift hypothesis explained many of the "why" questions. It explained why the edges of some continents fit together like puzzle pieces. It explained why continents separated by vast oceans have similar types of rock formations and fossils. What the hypothesis couldn't explain was "how." How could a mass of solid rock as large as Asia or North America move thousands of miles across Earth's surface? It would take an enormously powerful force to do that. Geologists in Wegener's day didn't know of any force on Earth's surface powerful enough to move continents.
-
-As a result, most geologists rejected the idea of continental drift. For decades, Wegener's hypothesis was harshly criticized. Still, a few geologists thought Wegener was on the right track. What if the driving force behind continental drift was below Earth's surface? How can you discover what lies beneath Earth's crust? Oddly enough, earthquakes helped scientists answer these questions.
 [endPage=12]
 
 [startPage=13]
+As a result, most geologists rejected the idea of continental drift. For decades, Wegener's hypothesis was harshly criticized. Still, a few geologists thought Wegener was on the right track. What if the driving force behind continental drift was below Earth's surface? How can you discover what lies beneath Earth's crust? Oddly enough, earthquakes helped scientists answer these questions.
+
 Have you ever tossed a small rock into a pond? Little waves travel out from the spot where the rock hits the water's surface. Although you can't see them, waves travel through the water below the surface, too.
 
 An earthquake is a bit like a rock plunking into water. During an earthquake, the ground shakes. The shaking is caused by waves of energy traveling out from the earthquake's source through the earth. Scientists call these seismic waves. Powerful seismic waves can travel very long distances. They can travel through Earth's crust and deep into its interior.
@@ -41,12 +41,13 @@ In the 1960s, scientists formed a new theory about how Earth's surface changes. 
 [endPage=17]
 
 [startPage=18]
-Scientists are still learning about plate tectonics. The theory of plate tectonics states that Earth's crust, together with the solid top of the mantle, is broken up into sections. These huge, rocky slabs are called tectonic plates. Tectonic plates fit tightly together. They aren't fixed in place though; they can move. They move because of heat and pressure in the mantle. As the material in the mantle slowly moves, it exerts enormous pressure on the overlying plates. All that pressure forces the plates to move as well—very, very slowly.
-
-Earth's tectonic plates have been slowly moving and interacting for billions of years. They interact mostly along their edges, or boundaries. Plate boundaries are where two or more tectonic plates meet.
+Scientists are still learning about plate tectonics. The theory of plate tectonics states that Earth's crust, together with the solid top of the mantle, is broken up into sections. These huge, rocky slabs are called
 [endPage=18]
 
 [startPage=19]
+tectonic plates. Tectonic plates fit tightly together. They aren't fixed in place though; they can move. They move because of heat and pressure in the mantle. As the material in the mantle slowly moves, it exerts enormous pressure on the overlying plates. All that pressure forces the plates to move as well—very, very slowly.
+
+Earth's tectonic plates have been slowly moving and interacting for billions of years. They interact mostly along their edges, or boundaries. Plate boundaries are where two or more tectonic plates meet.
 [endPage=19]
 
 [startPage=20]
