@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const booksDir = "/literacy-reader-framework/books";
     
     // Manually list known books
-    const books = ["suqua", "polio", "jane_goodall"];
+    const books = ["suqua", "polio", "jane_goodall", "geology"];
     
     await Promise.all(
       books.map(async (book) => {
