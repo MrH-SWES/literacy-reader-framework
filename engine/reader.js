@@ -248,6 +248,14 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     );
 
+    // Handle geology book absolute paths
+    if (book === "geology") {
+      html = html.replace(
+        /\[IMG:([^\]]+)\]/g,
+        (_, file) => `<img src="/literacy-reader-framework/books/geology/assets/${file}" class="chapter-illustration" style="display:block;margin:1.5rem auto;">`
+      );
+    }
+
     chapterContainer.innerHTML = makeParagraphHTML(html);
     enhanceGlossary();
 
