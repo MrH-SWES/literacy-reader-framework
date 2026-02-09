@@ -1,19 +1,13 @@
-[startPage=1]
+[startPage=2]
 If you had lived in Europe during the Middle Ages, the idea that the earth changes would have seemed crazy. At that time, people believed that mountains, valleys, and other landscape features had always been there. True, rare natural catastrophes sometimes occurred. Earthquakes, for example, shook the ground and triggered landslides. In some places, volcanoes erupted and sent up fountains of lava, or red-hot melted rock. However, people viewed these catastrophes as punishments from God, not as the earth changing.
 
 [IMG:map1570.jpg]
-[endPage=1]
-
-[startPage=2]
-During the 1400s, 1500s, and 1600s, European explorers found new continents and islands. Mapmakers created the first relatively accurate maps of the entire world. When people studied these maps, they noticed something interesting. Several continents looked as if they might fit together like pieces of a jigsaw puzzle.
-
-Take a look at a world map or globe. See how the eastern edge of South America looks as if it fits into the western edge of Africa? People wondered if the continents had once been joined and later moved apart.
 [endPage=2]
 
 [startPage=3]
-During the 1700s and 1800s, scientists noticed how great masses of rock appeared to have been lifted up to form cliffs and mountains over time. They began to believe that once-tall mountains had been worn down by wind, rain, and ice and that, over thousands of years, valleys had been carved by rivers.
+During the 1400s, 1500s, and 1600s, European explorers set sail on voyages of discovery. They found new continents and islands. Mapmakers created the first relatively accurate maps of the entire world. When people studied these maps, they noticed something interesting. Several continents looked as if they might fit together like pieces of a jigsaw puzzle. Take a look at a world map or globe. See how the eastern edge of South America looks as if it fits into the western edge of Africa? If you could somehow push these two continents together across the Atlantic Ocean, their edges would match up.
 
-These scientists found evidence that sea levels had been higher and lower in the past. They found layers of rock on mountain peaks that contained fossils, the preserved remains of things that lived long ago.
+People wondered if the continents had once been joined and later moved apart. At first, this seemed like a ridiculous idea. How could continents move on a planet that never changed?
 [endPage=3]
 
 [startPage=4]
@@ -24,6 +18,10 @@ During the 1700s and 1800s, many people skilled in scientific observation became
 All these observations led many scientists to believe that powerful natural forces were at work changing Earth's surface. Most of these changes were thought to have taken place very slowly. Over long periods of time, slow, gradual changes added up to produce dramatic results. These scientists were convinced that Earth's rocky surface had changed continuously throughout the planet's long history. It had changed in the past, and Earth was changing in the present, too.
 
 These ideas laid the foundation for the modern science of geology. Geology is the study of the makeup of the earth and the forces and processes that shape and change it. Rocks are very important in geology. That's because rocks hold clues to how Earth's surface has changed over time. Together with fossils, rocks provide information about the history of the earth.
+
+Shen Kua’s Observations 
+
+Shen Kua was a Chinese scientist and mathematician who lived from 1031–1095 CE. He studied rocks and fossils and made many observations of Earth’s surface features. Shen Kua realized that Earth’s surface is shaped very slowly by powerful forces. Some forces wear rocks down. Others make new rocks and push them up to become mountains. Shen Kua reached  these conclusions hundreds of years before European scientists did.
 [endPage=5]
 
 [startPage=6]
@@ -31,10 +29,12 @@ So what about the jigsaw-puzzle fit of the continents? During the 1800s and earl
 
 Geologists found fossils of an ancient fern called Glossopteris in similar rock layers in Africa, India, Australia, and South America. They found fossils of an ancient reptile, Lystrosaurus, in both southern Africa and India. In South America and Africa, fossils of another ancient reptile, Cynognathus, turned up directly across the Atlantic Ocean from each other.
 
-These discoveries seemed to indicate that the continents had once been joined—but how? Furthermore, how had they become separated? Several scientists proposed explanations, but they were quite far-fetched. One involved a gigantic eruption from the center of the earth that ripped all the land apart. Another suggested that part of Earth's land broke away to become the moon and what was left became the continents. Few people paid much attention to these ideas. A better explanation was needed, one with evidence to support it. In the early 1900s, Alfred Wegener provided just that.
+These discoveries seemed to indicate that the continents had once been joined—but how? Furthermore, how had they become separated? Several scientists proposed explanations, but they were quite far-fetched. One involved a gigantic eruption from the center of the earth that ripped all the land apart. Another suggested that part of Earth's land broke away to become the moon and what was left became the
 [endPage=6]
 
 [startPage=7]
+continents. Few people paid much attention to these ideas. A better explanation was needed, one with evidence to support it. In the early 1900s, Alfred Wegener provided just that.
+
 Born and educated in Germany, Alfred Wegener was interested in many scientific subjects, including weather, astronomy, and cold, polar regions. Around 1910, Wegener read a scientific paper about similar fossils and rock formations found on different continents. He was intrigued by the mystery of the matching continents and he wanted to solve this mystery.
 
 Wegener gathered evidence. He pulled together discoveries made by many other scientists about rock formations, fossils, and mountain ranges. Polar explorers had recently unearthed fossils of Glossopteris in Antarctica. Similar fossils had previously been found in other parts of the world. This seemed to indicate that ice-covered Antarctica might once have been joined to South America, Africa, India, and Australia. It also meant that Antarctica had once had a climate warm enough for ferns to grow.
