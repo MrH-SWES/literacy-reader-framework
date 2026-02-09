@@ -1,0 +1,11 @@
+{
+  "title": "Geology: The Changing Earth",
+  "author": "Core Knowledge Foundation",
+  "chapters": [
+    { 
+      "number": 1, 
+      "title": "Earth's Changing Surface", 
+      "file": "chapter1.txt" 
+    }
+  ]
+}
